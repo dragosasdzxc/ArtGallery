@@ -1,0 +1,50 @@
+﻿@model ArtGallery.Models.Views.UserView
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm("LoginDB","Login",FormMethod.Post,new {@style="width:70%;margin:auto;" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal"> 
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UsernameU, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.UsernameU, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.UsernameU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PasswordU, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.PasswordU, new { htmlAttributes = new { @class = "form-control", @type = "password", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.PasswordU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-11">
+                <input type="submit" value="Login" class="btn btn-default" style="background-color:lightgray"/>
+            </div>
+        </div>
+    </div>
+}
+
+    <div>
+        <input type="submit" value="Register" class="btn btn-primary" onclick="location.href='@Url.Action("CreateNewUsers","Home")'" style="float:left" />
+        <input type="submit" value="Forget password" class="btn btn-danger" style="float:right" />
+    </div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+</script>

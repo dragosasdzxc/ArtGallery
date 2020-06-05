@@ -1,0 +1,93 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.UsertypeView>
+
+@{
+    ViewBag.Title = "GetUsertypeList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>GetUsertypeList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CreateNewUsertype")
+</p>
+<table class="table" id="dataTable">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Edit</th>
+            <th>Change status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameUT)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <!--Html.ActionLink("Edit", "Edit", new { id = item.IDUT })-->
+                    <button type="button" class=" btn btn-primary" value="@item.IDUT" onclick="location.href='@Url.Action("EditUsertype","Admin",new { id=item.IDUT})'">Edit</button>
+                </td>
+                <td>
+                    <!--Html.ActionLink("Details", "Details", new { id = item.IDUT })-->
+                    <button type="button" class="changestatus btn btn-primary" value="@item.IDUT" onclick="">@item.Statusbtn</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('.changestatus').click(function () {
+                var id = $(this).val();
+                var mytarget = $(this);
+                if ($(this).text().toString() == "Lock") {
+                    $.ajax({
+                        url: '@Url.Action("LockUsertype","Admin")',
+                        type: 'POST',
+                        data: 'id=' + id,
+                        success: function () { //success
+                            alert("Lock success!");
+                            $(mytarget).html("Unlock"); //not working here
+                        }
+                    });
+                    return false;
+                } else {
+                    $.ajax({
+                        url: '@Url.Action("UnlockUsertype","Admin")',
+                        type: 'POST',
+                        data: 'id=' + id,
+                        success: function () { //success
+                            alert("Unlock success!");
+                            $(mytarget).html("Lock"); //not working here
+                        }
+                    });
+                    return false;
+                };
+            });
+
+            
+        });
+
+
+        jQuery(document).ready(function ($) {
+            $('#dataTable').DataTable();
+        });
+
+
+</script>

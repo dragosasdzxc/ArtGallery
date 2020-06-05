@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.ArtView>
+
+@{
+    ViewBag.Title = "ChooseArtByID";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<p style="font-size:20px;margin-top:10px;color:dodgerblue">Choose art for @Session["UCname"]</p>
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="artinfo col-lg-6" style="margin-top:10px">
+            <div class="box wow fadeInLeft">
+                <!--<div class="icon"><i class="fa fa-bar-chart"></i></div>-->
+                <img src="@Url.Content(item.FilePath)" style="width:400px;height:200px;float:left;padding-right:20px" />
+                <div style="">
+                    <h4 class="title">
+                        <a href="" style="font-size:30px;color:dodgerblue">@item.NameA</a><br />
+                        Category:<a href="" style="font-size:15px;color:dodgerblue">@item.NameUC</a>
+                    </h4>
+                    <button class="removeoradd btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">@item.UCbtn</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.removeoradd').click(function () {
+            var ida = $(this).val();
+            var idu = parseInt(@Session["IDU"].ToString());
+            var row = $(this).closest(".artinfo");
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Remove") {
+                $.ajax({
+                    url: '@Url.Action("RemoveArtFromUserCategoryByID","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function () {
+                        mytarget.html("Add");
+                        alert("Remove success!");
+                    }
+                });
+                return false;
+            } else if ($(this).text().toString() == "Add") {
+                $.ajax({
+                    url: '@Url.Action("AddArtToUserCategoryDB", "Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function () {
+                        mytarget.html("Remove");
+                        alert("Add success!");
+                    }
+                });
+                return false;
+            } else {
+                alert("Error has been occurred!");
+            }
+
+        });
+    });
+</script>

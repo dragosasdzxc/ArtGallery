@@ -1,31 +1,109 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<ArtGallery.Models.Views.ArtView>
+
+@{
+    ViewBag.Title = "GetArtList";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-6" style="margin-top:10px">
+            <div class="box wow fadeInLeft">
+                <!--<div class="icon"><i class="fa fa-bar-chart"></i></div>-->
+                <img src="@Url.Content(item.FilePath)" style="width:400px;height:200px;float:left;padding-right:20px" />
+                <div style="">
+                    <h4 class="title"><a href="" style="font-size:30px;color:dodgerblue">@item.NameA</a></h4>
+                    <p class="description" style="font-size:15px">
+                        Artist: @item.NameU<br />
+                        Price: @item.PriceA
+                    </p>
+                    <button class="likebtn btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">@item.Likebtn</button>
+                    <button class="addtocart btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">@item.Cartbtn</button>
+                    <button class="buynow btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    }
+
+
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.likebtn').click(function () {
+            var ida = $(this).val();
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Like") {
+                $.ajax({
+                    url: '@Url.Action("LikeArt","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success) {
+                            //alert(data.message);
+                            $(mytarget).html("Unlike");
+                        } else
+                        {
+                        alert("Please login!");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            } else {
+                $.ajax({
+                    url: '@Url.Action("UnlikeArt","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success) {
+                            //alert(data.message);
+                            $(mytarget).html("Like");
+                        } else {
+                            alert("Please login!");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            };
+        });
+
+        $('.addtocart').click(function () {
+            var ida = $(this).val();
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Add to cart") {
+                $.ajax({
+                    url: '@Url.Action("AddToCart","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success) {
+                            //alert(data.message);
+                            $(mytarget).html("Already in cart");
+                        } else
+                        {
+                        alert("Please login!");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            } else {
+                alert("This art is already in your cart!");
+            };
+        });
+    });
+
+</script>

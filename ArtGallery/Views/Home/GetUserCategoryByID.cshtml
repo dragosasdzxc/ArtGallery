@@ -1,0 +1,121 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.UsercategoryView>
+
+@{
+    ViewBag.Title = "GetUserCategoryByID";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+
+<h2>My category list</h2>
+
+<p style="font-size:20px">
+    @Html.ActionLink("Create New", "CreateNewUserCategory",routeValues:null,htmlAttributes: new {@style="color:dodgerblue" })
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameUC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaycreateUC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceUC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Arts</th>
+            <th>Change status</th>
+            <th>Delete</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameUC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaycreateUC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceUC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" style="width:auto;height:auto" onclick="location.href='@Url.Action("GetArtInUCByID","Home",new { iduc=item.IDUC,idu=int.Parse(Session["IDU"].ToString())})'">Show Art</button>
+                </td>
+                <td>
+                    <button type="button" class="changestatus btn btn-primary" style="width:auto;height:auto" value="@item.IDUC">@item.Statusbtn</button>
+                </td>
+                <td>
+                    <button type="button" class="deletebtn btn btn-primary" style="width:auto;height:auto" value="@item.IDUC">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.changestatus').click(function () {
+            var iduc = $(this).val();
+            var idu = parseInt(@Session["IDU"].ToString());
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Lock") {
+                $.ajax({
+                    url: '@Url.Action("LockUserCategoryByID","Home")',
+                    type: 'POST',
+                    data: 'iduc=' + iduc + '&idu=' + idu,
+                    success: function () {
+                        alert("Lock success!");
+                        $(mytarget).html("Unlock");
+                    }
+                });
+                return false;
+            } else {
+                $.ajax({
+                    url: '@Url.Action("UnlockUserCategoryByID","Home")',
+                    type: 'POST',
+                    data: 'iduc=' + iduc + '&idu=' +idu,
+                    success: function () {
+                        alert("Unlock success!");
+                        $(mytarget).html("Lock");
+                    }
+                });
+                return false;
+            };
+        });
+
+        $('.deletebtn').click(function () {
+            var iduc = $(this).val();
+            var idu = parseInt(@Session["IDU"].ToString());
+            var row = $(this).closest("tr");
+            $.ajax({
+                url: '@Url.Action("DeleteUserCategoryDB","Home")',
+                type: 'POST',
+                data: 'iduc=' + iduc + '&idu=' +idu,
+                success: function () {
+                    row.remove();
+                    alert("Delete success!");
+                }
+            });
+            return false;
+        });
+    });
+
+</script>

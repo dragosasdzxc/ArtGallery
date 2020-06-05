@@ -1,0 +1,156 @@
+﻿@model ArtGallery.Models.Views.UserView
+
+@{
+    ViewBag.Title = "EditUser";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<h2>@Session["UsernameU"] Profile</h2>
+
+@using (Html.BeginForm(null,null,FormMethod.Post,new { @class="col-8"}))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => Model.IDU)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstnameU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your firstname" } })
+                @Html.ValidationMessageFor(model => model.FirstnameU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastnameU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your lastname" } })
+                @Html.ValidationMessageFor(model => model.LastnameU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AddressU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AddressU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your address" } })
+                @Html.ValidationMessageFor(model => model.AddressU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhoneU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PhoneU, new { htmlAttributes = new { @class = "form-control", @type = "number", @minlength = "10", @maxlength = "13" } })
+                @Html.ValidationMessageFor(model => model.PhoneU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailU, new { htmlAttributes = new { @class = "form-control", @type = "email", @pattern = ".+@gmail.com", @placeholder = "Example: Yourmail@gmail.com" } })
+                @Html.ValidationMessageFor(model => model.EmailU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DofbU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DofbU, new { htmlAttributes = new { @class = "form-control", @id = "datePicker" } })
+                @Html.ValidationMessageFor(model => model.DofbU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SexU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SexU, new { htmlAttributes = new { @type = "checkbox", @class = " form-control", @placeholder = "Your email" } })
+                <div style="text-align:center">Male=Check, Female=Uncheck</div>
+                @Html.ValidationMessageFor(model => model.SexU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UsernameU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UsernameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your account username", @id = "Username", @name = "Username", @onchange = "UserCheck()",@readonly="true" } })
+                <div class="row">
+                    <div class="col-sm">
+                        @Html.ValidationMessageFor(model => model.UsernameU, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm">
+                        <p id="Status"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PasswordU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PasswordU, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Your password" } })
+                @Html.ValidationMessageFor(model => model.PasswordU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" id="savebtn" formaction="@Url.Action("EditUserDB","Home",new { id=Model.IDU})"/>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+    function UserCheck() {
+        $("#Status").html("Checking...");
+        $.post("@Url.Action("CheckUsernameAvailability", "Admin")",
+            {
+                userdata: $("#Username").val()
+            },
+        function (data) {
+            if (data == 0) {
+                $("#Status").html('<font color="Green">Available ! You can take it.</font>');
+                $("#Username").css("border-color", "Green");
+                $('#savebtn').removeAttr('disabled');
+                $('#savebtn').attr('formaction','@Url.Action("EditUserDB","Home",new { id=Model.IDU})');
+            }
+            else {
+                $("#Status").html('<font color="Red">That username is taken. Try Another!</font>');
+                $("#Username").css("border-color", "Red");
+                $('#savebtn').attr('disabled', true);
+            }
+        });
+    }
+
+    $(function () {
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+        var val = ("0" +@Model.DofbU.Day).slice(-2);
+        var val1 = ("0" +@Model.DofbU.Month).slice(-2);
+        var val2 =@Model.DofbU.Year;
+        var value = val2 + "-" + val1 + "-" + val;
+        var maxDate = year + '-' + month + '-' + day;
+        //alert("Welcome Admin, today is "+maxDate);
+
+        $('#datePicker').attr('max', maxDate);
+        $('#datePicker').attr('type', "date");
+        $('#datePicker').val(value);
+        //$('#datePicker').attr('type', "datetime-local");
+    });
+
+</script>

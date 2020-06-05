@@ -1,0 +1,264 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.ArtView>
+
+@{
+    ViewBag.Title = "GetAllArt";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>GetAllArt</h2>
+
+<!--<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Html.DisplayNameFor(model => model.NameA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.WidthA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.HeightA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.DepthA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.MaterialA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.DaycreateA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.DescriptionA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.PriceA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.NameAT)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.NameAS)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.NameU)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.NameC)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.NameUC)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.FilePath)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.FileSize)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.StatusA)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.LikeCount)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                Html.DisplayNameFor(model => model.Statusbtn)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    Html.DisplayFor(modelItem => item.NameA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.WidthA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.HeightA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.DepthA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.MaterialA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.DaycreateA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.DescriptionA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.PriceA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.NameAT)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.NameAS)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.NameU)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.NameC)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.NameUC)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.FilePath)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.FileSize)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.StatusA)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.LikeCount)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    Html.DisplayFor(modelItem => item.Statusbtn)
+                </td>
+                <td>
+                    Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>-->
+
+<table id="dataTable" class="table table-striped table-bordered" style="width:100%!important">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaycreateA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                Detail
+            </th>
+            <th>
+                Change status
+            </th>
+            <th>
+                Delete
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DaycreateA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameU)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <!--Html.ActionLink("Edit", "EditUser", new { id = item.IDU })-->
+                <button type="button" class="btn btn-primary" style="width:auto;height:auto" onclick="location.href='@Url.Action("ArtDetail","Admin",new { id=item.IDA})'">Detail</button>
+            </td>
+            <td>
+                <!--Html.ActionLink(item.Statusbtn, "ChangeStatusUserDB", new { id = item.IDU },new {class="changestatus" })-->
+                <button type="button" class="changestatus btn btn-primary" value="@item.IDA" style="width:auto;height:auto">@item.Statusbtn</button>
+            </td>
+            <td>
+                <!--Html.ActionLink("Delete", "DeleteUserDB", new { id = item.IDU })-->
+                <button type="button" class="deleteart btn btn-primary" value="@item.IDA" style="width:auto;height:auto">Delete</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.changestatus').click(function () {
+            var id = $(this).val();
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Lock") {
+                $.ajax({
+                    url: '@Url.Action("LockArt","Admin")',
+                    type: 'POST',
+                    data: 'id=' + id,
+                    success: function () {
+                        alert("Lock success!");
+                        $(mytarget).html("Unlock"); //not working here
+                    }
+                });
+                return false;
+            } else {
+                $.ajax({
+                    url: '@Url.Action("UnlockArt","Admin")',
+                    type: 'POST',
+                    data: 'id=' + id,
+                    success: function () {
+                        alert("Unlock success!");
+                        $(mytarget).html("Lock"); //not working here
+                    }
+                });
+                return false;
+            };
+        });
+
+        $('.deleteart').click(function () {
+            var id = $(this).val();
+            var row = $(this).closest("tr");
+            $.ajax({
+                    url: '@Url.Action("DeleteArt","Admin")',
+                    type: 'POST',
+                    data: 'id=' + id,
+                success: function () {
+                    row.remove();
+                    alert("Delete success!");
+                    }
+                });
+        });
+    });
+
+
+    jQuery(document).ready(function ($) {
+        $('#dataTable').DataTable();
+    });
+
+
+</script>

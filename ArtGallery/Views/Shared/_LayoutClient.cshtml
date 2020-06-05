@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Reveal Bootstrap Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    @Styles.Render("~/Content/css")<!--must delete ../Site.css in bundle.config if use other css below-->
+    <!-- Favicons -->
+    <link href="@Url.Content("~/Content/LC_Themes/img/favicon.png")" rel="icon">
+    <link href="@Url.Content("~/Content/LC_Themes/img/apple-touch-icon.png")" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800|Montserrat:300,400,700" rel="stylesheet">
+
+    <!-- Bootstrap CSS File -->
+    <link href="@Url.Content("~/Content/LC_Themes/lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
+
+    <!-- Libraries CSS Files -->
+    <link href="@Url.Content("~/Content/LC_Themes/lib/font-awesome/css/font-awesome.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/LC_Themes/lib/animate/animate.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/LC_Themes/lib/ionicons/css/ionicons.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/LC_Themes/lib/owlcarousel/assets/owl.carousel.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/LC_Themes/lib/magnific-popup/magnific-popup.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/LC_Themes/lib/ionicons/css/ionicons.min.css")" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="@Url.Content("~/Content/LC_Themes/css/style.css")" rel="stylesheet">
+
+    <style>
+        .dropdowns {
+            margin-right: 80px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            background-color: white;
+            padding-left: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .dropdowns:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- =======================================================
+      Theme Name: Reveal
+      Theme URL: https ://bootstrapmade.com/reveal-bootstrap-corporate-template/
+      Author: BootstrapMade.com
+      License: https ://bootstrapmade.com/license/
+    ======================================================= -->
+</head>
+
+<body id="body">
+
+    <!--==========================
+      Top Bar
+    ============================-->
+    <!--<section id="topbar" class="d-none d-lg-block">
+        <div class="container clearfix">
+            <div class="contact-info float-left">
+                <i class="fa fa-envelope-o"></i> <a href="mailto:contact@example.com">contact@example.com</a>
+                <i class="fa fa-phone"></i> +1 5589 55488 55
+            </div>
+            <div class="social-links float-right">
+                <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+                <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+                <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+                <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+            </div>
+        </div>
+    </section>-->
+    <!--==========================
+      Header
+    ============================-->
+    <header id="header">
+        <div class="container">
+
+            <div id="logo" class="pull-left">
+                <h1><a href="#body" class="scrollto">Reve<span>al</span></a></h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="#body"><img src="img/logo.png" alt="" title="" /></a>-->
+            </div>
+
+            <nav id="nav-menu-container">
+                <ul class="nav-menu">
+                    <li class="menu-active"><a href="#body" style="color:dodgerblue!important">Home</a></li>
+                    <li><a href="#about">Artworks</a></li>
+                    <li><a href="#services">Newest</a></li>
+                    <li><a href="#portfolio">Popular</a></li>
+                    <li><a href="#team">About Us</a></li>
+                    <!--<li class="menu-has-children">
+                        <a href="">Drop Down</a>
+                        <ul>
+                            <li><a href="#">Drop Down 1</a></li>
+                            <li><a href="#">Drop Down 3</a></li>
+                            <li><a href="#">Drop Down 4</a></li>
+                            <li><a href="#">Drop Down 5</a></li>
+                        </ul>
+                    </li>-->
+                    <li><a href="#contact">Contact</a></li>
+                    @if (HttpContext.Current.Session["IDU"] != null && HttpContext.Current.Session["IDU"] != "")
+                    {
+                        <li style="">
+                            <div class="dropdowns">
+                                @Html.ActionLink(Session["UsernameU"].ToString(), "EditUser", "Home", new { id = int.Parse(Session["IDU"].ToString()) })
+                                <div class="dropdown-content">
+                                    @Html.ActionLink("Profile", "EditUser", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "editprofile", style = "font-size:20px" })<br />
+                                    @Html.ActionLink("My Art", "GetArtListByID", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "artlist", style = "font-size:20px" })<br />
+                                    @Html.ActionLink("My Category", "GetUserCategoryByID", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "category", style = "font-size:20px" })<br />
+                                    @Html.ActionLink("Cart", "GetCartByID", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "cart", style = "font-size:20px" })<br />
+                                    @Html.ActionLink("Logout", "LogoutDB", "Login", routeValues: null, htmlAttributes: new { id = "logout", style = "font-size:20px" })
+                                </div>
+                            </div>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li style="">
+                            <div class="" style="padding-right:10px">
+                                @Html.ActionLink("Login", "Login", "Login", null, htmlAttributes: new { }) |
+                                @Html.ActionLink("Register", "CreateNewUsers", "Home", null, htmlAttributes: new { })
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </nav><!-- #nav-menu-container -->
+        </div>
+    </header><!-- #header -->
+
+
+    <main id="main">
+
+        <section>
+            <div class="container">
+                @RenderBody()
+            </div>
+        </section>
+
+        <!--==========================
+          Contact Section
+        ============================-->
+        <!--<section id="contact" class="wow fadeInUp">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Contact Us</h2>
+                    <p>Sed tamen tempor magna labore dolore dolor sint tempor duis magna elit veniam aliqua esse amet veniam enim export quid quid veniam aliqua eram noster malis nulla duis fugiat culpa esse aute nulla ipsum velit export irure minim illum fore</p>
+                </div>
+
+                <div class="row contact-info">
+
+                    <div class="col-md-4">
+                        <div class="contact-address">
+                            <i class="ion-ios-location-outline"></i>
+                            <h3>Address</h3>
+                            <address>A108 Adam Street, NY 535022, USA</address>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="contact-phone">
+                            <i class="ion-ios-telephone-outline"></i>
+                            <h3>Phone Number</h3>
+                            <p><a href="tel:+155895548855">+1 5589 55488 55</a></p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="contact-email">
+                            <i class="ion-ios-email-outline"></i>
+                            <h3>Email</h3>
+                            <p><a href="mailto:info@example.com">info@example.com</a></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="container mb-4">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22864.11283411948!2d-73.96468908098944!3d40.630720240038435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sbg!4v1540447494452" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+
+            <div class="container">
+                <div class="form">
+                    <div id="sendmessage">Your message has been sent. Thank you!</div>
+                    <div id="errormessage"></div>
+                    <form action="" method="post" role="form" class="contactForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                                <div class="validation"></div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                                <div class="validation"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                            <div class="validation"></div>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                            <div class="validation"></div>
+                        </div>
+                        <div class="text-center"><button type="submit">Send Message</button></div>
+                    </form>
+                </div>
+
+            </div>
+        </section>-->
+        <!-- #contact -->
+
+    </main>
+
+    <!--==========================
+      Footer
+    ============================-->
+    <!--<footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong>Reveal</strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+
+    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+    </div>
+    </footer>-->
+    <!-- #footer -->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+
+    @if (ViewBag.Alert != null)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+
+                alert("@ViewBag.Alert");
+        };
+        </script>
+    }
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <!-- JavaScript Libraries -->
+    <script src="@Url.Content("~/Content/LC_Themes/lib/jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/jquery/jquery-migrate.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/easing/easing.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/superfish/hoverIntent.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/superfish/superfish.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/wow/wow.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/owlcarousel/owl.carousel.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/magnific-popup/magnific-popup.min.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/sticky/sticky.js")"></script>
+
+    <!-- Contact Form JavaScript File -->
+    <script src="@Url.Content("~/Content/LC_Themes/contactform/contactform.js")"></script>
+
+    <!-- Template Main Javascript File -->
+    <script src="@Url.Content("~/Content/LC_Themes/js/main.js")"></script>
+
+</body>
+</html>
+
+

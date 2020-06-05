@@ -1,0 +1,161 @@
+﻿@model ArtGallery.Models.Views.UserViewAdmin
+
+@{
+    ViewBag.Title = "CreateNewUsers";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>CreateNewUsers</h2>
+
+@using (Html.BeginForm("CreateNewUsersDB", "Admin", "POST")) //"CreateNewUsersDB", "Admin", "POST"
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>UserView</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.FirstnameU, "First name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.FirstnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your first name" } })
+                @Html.ValidationMessageFor(model => model.user.FirstnameU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.LastnameU, "Last name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.LastnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your last name" } })
+                @Html.ValidationMessageFor(model => model.user.LastnameU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.AddressU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.AddressU, "Address", new { htmlAttributes = new { @class = "form-control", @placeholder = "Your address" } })
+                @Html.ValidationMessageFor(model => model.user.AddressU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.PhoneU, "Phonenumber", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.PhoneU, new { htmlAttributes = new { @class = "form-control", @type = "number", @minlength = "10", @placeholder = "Your phonenumber", @maxlength = "13" } })
+                @Html.ValidationMessageFor(model => model.user.PhoneU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.EmailU, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.EmailU, new { htmlAttributes = new { @class = "form-control", @type = "email", @pattern = ".+@gmail.com", @placeholder = "Example: Yourmail@gmail.com" } })
+                @Html.ValidationMessageFor(model => model.user.EmailU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.DofbU, "Day of birth", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.DofbU, new { htmlAttributes = new { @class = "form-control", @type = "date", @id = "datePicker" } })
+                @Html.ValidationMessageFor(model => model.user.DofbU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.SexU, "Sex", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10 row">
+                @Html.EditorFor(model => model.user.SexU, new { htmlAttributes = new { @type = "checkbox", @class = " form-control" } })
+                <div style="text-align:center">Male=Check, Female=Uncheck</div>
+                @Html.ValidationMessageFor(model => model.user.SexU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.UsernameU, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.UsernameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your account username", @id = "Username", @name="Username", @onchange = "UserCheck()" } })
+                <div class="row">
+                    <div class="col-sm">
+                        @Html.ValidationMessageFor(model => model.user.UsernameU, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm">
+                        <p id="Status"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.PasswordU, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.user.PasswordU, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Your account password" } })
+                @Html.ValidationMessageFor(model => model.user.PasswordU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.user.IDUT, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10" style="margin-top:10px">
+                <div class="dropdown">
+                    @Html.DropDownListFor(m => m.user.IDUT, new SelectList(Model.usertype, "IDUT", "NameUT"), "Select Usertype")
+                    @Html.ValidationMessageFor(model => model.user.IDUT, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" id="create" onclick="CheckUsername()" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "GetUserList")
+</div>
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    function UserCheck() {
+        $("#Status").html("Checking...");
+        $.post("@Url.Action("CheckUsernameAvailability", "Admin")",
+            {
+                userdata: $("#Username").val()
+            },
+        function (data) {
+            if (data == 0) {
+                $("#Status").html('<font color="Green">Available ! You can take it.</font>');
+                $("#Username").css("border-color", "Green");
+
+            }
+            else {
+                $("#Status").html('<font color="Red">That username is taken. Try Another!</font>');
+                $("#Username").css("border-color", "Red");
+            }
+        });
+    }
+
+    $(function () {
+
+        var dtToday = new Date();
+
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+
+        var maxDate = year + '-' + month + '-' + day;
+        //alert("Welcome Admin, today is "+maxDate);
+        $('#datePicker').attr('max', maxDate);
+    });
+
+</script>
