@@ -145,16 +145,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NameA)
+                Art's name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DaycreateA)
+                Day create
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PriceA)
+                Price
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NameU)
+                User
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
@@ -184,7 +184,7 @@
                 @Html.DisplayFor(modelItem => item.PriceA)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NameU)
+                <a href="@Url.Action("EditUser","Admin",new {id=item.IDU })">@item.NameU</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)

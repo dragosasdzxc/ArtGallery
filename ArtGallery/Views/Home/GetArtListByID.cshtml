@@ -7,72 +7,82 @@
 
 <a href="@Url.Action("AddNewArt","Home")" style="font-size:20px;color:dodgerblue">Creater New</a>
 <div class="row">
-        
-    @foreach (var item in Model)
+    @if (Model.Count() > 0)
     {
-        <div class="artinfo col-lg-6" style="margin-top:10px">
-            <div class="box wow fadeInLeft">
-                <!--<div class="icon"><i class="fa fa-bar-chart"></i></div>-->
-                <img src="@Url.Content(item.FilePath)" style="width:400px;height:200px;float:left;padding-right:20px" />
-                <div style="">
-                    <h4 class="title"><a href="" style="font-size:30px;color:dodgerblue">@item.NameA</a></h4>
-                    <button class="changestatus btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">@item.Statusbtn</button>
-                    <button class="btn btn-primary" type="button" style="width:auto;height:auto" onclick="location.href='@Url.Action("EditArtByID","Home",new {ida=item.IDA,idu=int.Parse(Session["IDU"].ToString()) })'">Edit</button>
-                    <button class="deletebtn btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">Delete</button>
+        foreach (var item in Model)
+        {
+            <div class="artinfo col-lg-6" style="margin-top:10px">
+                <div class="box wow fadeInLeft">
+                    <!--<div class="icon"><i class="fa fa-bar-chart"></i></div>-->
+                    <div><img src="@Url.Content(item.FilePath)" style="width:400px;height:200px;float:left;padding-right:20px" /></div><br />
+                    <div style="">
+                        <h4 class="title"><a href="" style="font-size:30px;color:dodgerblue">@item.NameA</a></h4>
+                        <!--<button class="changestatus btn btn-primary" type="button" style="width:auto;height:auto" value="item.IDA">item.Statusbtn</button>-->
+                        <button class="btn btn-primary" type="button" style="width:auto;height:auto" onclick="location.href='@Url.Action("EditArtByID","Home",new {ida=item.IDA,idu=int.Parse(Session["IDU"].ToString()) })'">Edit</button>
+                        <button class="deletebtn btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA">Delete</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
+    else
+    {
+        <div style="width:100%;color:dodgerblue;text-align:center">Your art library is empty!</div>
+    }
+
 </div>
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.changestatus').click(function () {
+        /*$('.changestatus').click(function () {
             var ida = $(this).val();
-            var idu = parseInt(@Session["IDU"].ToString());
+            var idu = parseInt(Session["IDU"].ToString());
             var mytarget = $(this);
             if ($(this).text().toString() == "Lock") {
                 $.ajax({
-                    url: '@Url.Action("LockArtByID","Home")',
+                    url: 'Url.Action("LockArtByID","Home")',
                     type: 'POST',
                     data: 'ida=' + ida + '&idu=' +idu,
                     success: function () {
                         alert("Lock success!");
-                        $(mytarget).html("Unlock"); 
+                        $(mytarget).html("Unlock");
                     }
                 });
                 return false;
             } else {
                 $.ajax({
-                    url: '@Url.Action("UnlockArtByID","Home")',
+                    url: 'Url.Action("UnlockArtByID","Home")',
                     type: 'POST',
                     data: 'ida=' + ida + '&idu=' +idu,
                     success: function () {
                         alert("Unlock success!");
-                        $(mytarget).html("Lock"); 
+                        $(mytarget).html("Lock");
                     }
                 });
                 return false;
             };
-        });
+        });*/
 
         $('.deletebtn').click(function () {
+
             var ida = $(this).val();
             var idu = parseInt(@Session["IDU"].ToString());
             var row = $(this).closest(".artinfo");
             $.ajax({
-                url: '@Url.Action("DeleteArt","Home")',
+                url: '@Url.Action("DeleteArt", "Home")',
                 type: 'POST',
                 data: 'ida=' + ida + '&idu=' +idu,
                 success: function () {
                     row.remove();
-                    alert("Delete success!");
+                    //alert("Remove success!");
                 }
             });
             return false;
         });
     });
+
+
 </script>
 

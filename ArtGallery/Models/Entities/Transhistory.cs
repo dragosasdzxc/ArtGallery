@@ -14,21 +14,12 @@ namespace ArtGallery.Models.Entities
     
     public partial class Transhistory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Transhistory()
-        {
-            this.Transdetails = new HashSet<Transdetail>();
-        }
-    
         public int IDTH { get; set; }
         public System.DateTime DaycreateTH { get; set; }
-        public int IDTS { get; set; }
         public int IDU { get; set; }
         public decimal Total { get; set; }
+        public int UIDTH { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transdetail> Transdetails { get; set; }
-        public virtual Transstatu Transstatu { get; set; }
         public virtual User User { get; set; }
     }
 }

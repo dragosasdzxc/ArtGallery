@@ -10,8 +10,8 @@ namespace ArtGallery.Models.Views
         public int IDUC { get; set; }
         public string NameUC { get; set; }
         public System.DateTime DaycreateUC { get; set; }
-        public decimal PriceUC { get; set; }
         public bool StatusUC { get; set; }
+        public decimal PriceUC { get; set; }
         public int IDU { get; set; }
         public string Status { get; set; }
         public string Statusbtn { get; set; }

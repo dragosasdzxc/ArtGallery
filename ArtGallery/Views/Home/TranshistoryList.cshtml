@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.TranshistoryView>
+
+@{
+    ViewBag.Title = "TranshistoryList";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<h2>TranshistoryList</h2>
+<table id="dataTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaycreateTH)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaycreateTH)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UIDTH)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" style="width:auto;height:auto" value="@item.UIDTH" onclick="location.href='@Url.Action("TransdetailList","Home",new { idu=int.Parse(Session["IDU"].ToString()),uidth=item.UIDTH})'">Detail</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        $('#dataTable').DataTable({
+            responsive: true,
+        });
+
+    });
+</script>

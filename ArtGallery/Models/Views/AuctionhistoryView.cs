@@ -12,5 +12,8 @@ namespace ArtGallery.Models.Views
         public int IDA { get; set; }
         public int IDUA { get; set; }
         public decimal PriceAu { get; set; }
+        public string NameU { get; set; }
+        public string NameA { get; set; }
+        public string NameUA { get; set; }
     }
 }

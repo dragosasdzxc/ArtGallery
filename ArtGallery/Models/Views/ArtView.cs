@@ -35,5 +35,6 @@ namespace ArtGallery.Models.Views
         public string Likebtn { get; set; }
         public string Cartbtn { get; set; }
         public string UCbtn { get; set; }
+        public string Transbtn { get; set; }
     }
 }

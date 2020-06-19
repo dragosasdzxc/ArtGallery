@@ -1,0 +1,100 @@
+﻿@model List<ArtGallery.Models.Views.CartView>
+
+@{
+    /**/
+
+    ViewBag.Title = "GetCartList";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+<h2>GetCartList</h2>
+
+@using (Html.BeginForm("PayCartMultiple", "Home", FormMethod.Post)) //"PayCartMultiple","Home",FormMethod.Post
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <table id="dataTable" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <!--Html.DisplayNameFor(model => model.NameA)-->NameA
+                        </th>
+                        <th>
+                            <!--Html.DisplayNameFor(model => model.PriceA)-->PriceA
+                        </th>
+                        <th>Detail</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NameA)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PriceA)
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" value="@item.IDA" onclick="location.href='@Url.Action("ArtDetail","Home",new { ida=item.IDA})'">Detail</button>
+                            </td>
+                            <td>
+                                <button type="button" class="removebtn btn btn-primary" value="@item.IDA">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p style="color:dodgerblue;font-size:20px;float:right">Total: <span style="color:black" id="total">@Model.Sum(a => a.PriceA)</span></p>
+        <div class="form-group">
+            <div>
+                <input id="paycart" type="submit" value="Pay with Paypal" class="btn btn-primary"/> <!--onclick="location.href='Url.Action("PayCartMultiple","Home")'"-->
+            </div>
+        </div>
+
+    </div>
+}
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function ($) {
+        $('#dataTable').DataTable({
+            responsive: true,
+        });
+
+        $('.removebtn').click(function () {
+            
+            var ida = $(this).val();
+            var idu = parseInt(@Session["IDU"].ToString());
+            var row = $(this).closest("tr");
+            var totalpre = parseInt($('#total').html().toString());
+            var price = parseInt($(this).parents('tr:first').find('td:nth-child(2)').text());
+            var totalnow = parseInt(totalpre - price);
+            $.ajax({
+                url: '@Url.Action("RemoveArtFromCart", "Home")',
+                type: 'POST',
+                data: 'ida=' + ida + '&idu=' +idu,
+                success: function () {
+                    row.remove();
+                    $('#total').html(totalnow.toString());
+                    
+                    //alert("Delete success!");
+                }
+            });
+            return false;
+        });
+
+    });
+
+</script>
+
+

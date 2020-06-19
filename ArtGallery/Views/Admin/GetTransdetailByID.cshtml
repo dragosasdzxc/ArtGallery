@@ -1,0 +1,47 @@
+﻿@model ArtGallery.Models.Views.TransView
+
+@{
+    ViewBag.Title = "GetTransdetailByID";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>GetTransdetailByID</h2>
+
+<p>
+    User: @Model.thv.NameU<br/>
+    UID: @Model.thv.UIDTH
+</p>
+<table id="dataTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Art's Name</p>
+            </th>
+            <th>
+                <p>Price</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.tdv)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceA)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#dataTable').DataTable();
+    });
+</script>

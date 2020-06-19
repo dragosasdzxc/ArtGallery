@@ -16,14 +16,14 @@ body {
 }
 
 a {
-  color: #50d8af;
+  color: dodgerblue;
   transition: 0.5s;
 }
 
 a:hover,
 a:active,
 a:focus {
-  color: #51d8af;
+  color: dodgerblue;
   outline: none;
   text-decoration: none;
 }
@@ -50,7 +50,7 @@ h6 {
 .back-to-top {
   position: fixed;
   display: none;
-  background: #50d8af;
+  background-color:dodgerblue;
   color: #fff;
   padding: 6px 12px 9px 12px;
   font-size: 16px;
@@ -351,7 +351,7 @@ h6 {
 
 .nav-menu li:hover > a,
 .nav-menu .menu-active > a {
-  color: #50d8af;
+  color: dodgerblue;
 }
 
 .nav-menu > li {
@@ -520,7 +520,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   display: block;
   width: 50px;
   height: 3px;
-  background: #50d8af;
+  background-color: dodgerblue;
   bottom: 0;
   left: 0;
 }

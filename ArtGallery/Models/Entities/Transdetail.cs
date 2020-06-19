@@ -16,9 +16,8 @@ namespace ArtGallery.Models.Entities
     {
         public int IDTD { get; set; }
         public int IDA { get; set; }
-        public int IDTH { get; set; }
+        public int UIDTH { get; set; }
     
         public virtual Art Art { get; set; }
-        public virtual Transhistory Transhistory { get; set; }
     }
 }

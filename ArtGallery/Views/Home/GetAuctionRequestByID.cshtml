@@ -1,0 +1,89 @@
+﻿@model ArtGallery.Models.Views.AuctionArtView
+
+@{
+    ViewBag.Title = "GetAuctionRequestByID";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<meta http-equiv="refresh" content="10">
+<div id="countdown" style="width:100%;text-align:center;padding-bottom:10px;padding-top:10px;color:dodgerblue"></div>
+<div class="row">
+    <div class="col-lg-6 col-md-12">
+        <img src="@Url.Content(Model.av.FilePath)" alt="Alternate Text" style="width:400px;height:200px" />
+        <p style="font-weight:bold;padding-top:10px">Highest price now: $ <span id="highestprice">@Model.currentPrice</span></p>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <table class="table" id="auctionTable">
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Accept</th>
+                <th>Decline</th>
+            </tr>
+
+            @foreach (var item in Model.ahv)
+            {
+
+                <tr>
+                    <td>@item.NameUA</td>
+                    <td>@item.PriceAu</td>
+                    <td>
+                        <button type="button" class="acceptbtn btn btn-primary" value="@item.IDAH" onclick="location.href='@Url.Action("AcceptAuctionDB","Home",new { idah=item.IDAH,idus=int.Parse(Session["IDU"].ToString()),idur=item.IDUA,ida=Model.av.IDA})'">Accept</button>
+                    </td>
+                    <td>
+                        <button type="button" class="declinebtn btn btn-primary" value="@item.IDAH">Decline</button>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.declinebtn').click(function () {
+            var idah = $(this).val();
+            var row = $(this).closest("tr");
+            $.ajax({
+                    url: '@Url.Action("DeclineAuctionRequestDB", "Home")',
+                    type: 'POST',
+                    data: 'idah=' + idah,
+                success: function () {
+                    row.remove();
+                    alert("Delete success!");
+                    }
+                });
+        });
+
+        var timeleft = 10;
+        var downloadTimer = setInterval(function () {
+            if (timeleft <= 0) {
+                //clearInterval(downloadTimer);
+                document.getElementById("countdown").innerHTML = "Refreshing...!";
+                /*$.ajax({
+                    url: 'Url.Action("GetTop5AuctionParticipants","Home")',
+                    dataType: "json",
+                    method: 'get',
+                    success: function (data) {
+                        var itemTable = $('#auctionTable tbody');
+                        itemTable.empty();
+                        $(data).each(function (index, item) {
+                            itemTable.append('<tr><td>' + item.NameUA + '</td><td>'
+                                + item.PriceAu + '</td></tr>');
+                        });
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });*/
+                timeleft = 10;
+            } else {
+                document.getElementById("countdown").innerHTML = "Auction participants lists refresh after " + timeleft + " seconds.";
+            }
+            timeleft -= 1;
+        }, 1000);
+    });
+</script>

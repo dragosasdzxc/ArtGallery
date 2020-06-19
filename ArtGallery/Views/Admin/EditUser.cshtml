@@ -11,108 +11,115 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>UserView</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => Model.user.IDU)
+<div class="form-horizontal">
+    <h4>UserView</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => Model.user.IDU)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.FirstnameU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.FirstnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your firstname" } })
-                @Html.ValidationMessageFor(model => model.user.FirstnameU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.FirstnameU,"Firstname", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.FirstnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your firstname", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.user.FirstnameU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.LastnameU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.LastnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your lastname" } })
-                @Html.ValidationMessageFor(model => model.user.LastnameU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.LastnameU,"Lastname", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.LastnameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your lastname", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.user.LastnameU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.AddressU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.AddressU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your address" } })
-                @Html.ValidationMessageFor(model => model.user.AddressU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.AddressU,"Address", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.AddressU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your address", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.user.AddressU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.PhoneU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.PhoneU, new { htmlAttributes = new { @class = "form-control", @type = "number", @minlength = "10", @maxlength = "13" } })
-                @Html.ValidationMessageFor(model => model.user.PhoneU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.PhoneU,"Phone number", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.PhoneU, new { htmlAttributes = new { @class = "form-control", @type = "number", @minlength = "10", @maxlength = "13", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.user.PhoneU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.EmailU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.EmailU, new { htmlAttributes = new { @class = "form-control", @type = "email", @pattern = ".+@gmail.com", @placeholder = "Example: Yourmail@gmail.com" } })
-                @Html.ValidationMessageFor(model => model.user.EmailU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.EmailU,"Email", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.EmailU, new { htmlAttributes = new { @class = "form-control", @type = "email", @pattern = ".+@gmail.com", @required = "true" ,@placeholder = "Example: Yourmail@gmail.com" } })
+            @Html.ValidationMessageFor(model => model.user.EmailU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.DofbU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.DofbU, new { htmlAttributes = new { @class = "form-control", @id = "datePicker" } })
-                @Html.ValidationMessageFor(model => model.user.DofbU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.DofbU,"Date of birth", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.DofbU, new { htmlAttributes = new { @class = "form-control", @id = "datePicker", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.user.DofbU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.SexU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.SexU, new { htmlAttributes = new { @type = "checkbox", @class = " form-control", @placeholder = "Your email" } })
-                <div style="text-align:center">Male=Check, Female=Uncheck</div>
-                @Html.ValidationMessageFor(model => model.user.SexU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.SexU, "Sex", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.SexU, new { htmlAttributes = new { @type = "checkbox", @class = " form-control", @placeholder = "Your email" } })
+            <div style="text-align:center">Male=Check, Female=Uncheck</div>
+            @Html.ValidationMessageFor(model => model.user.SexU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.UsernameU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.UsernameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your account username", @id = "Username", @name = "Username", @onchange = "UserCheck()" } })
-                <div class="row">
-                    <div class="col-sm">
-                        @Html.ValidationMessageFor(model => model.user.UsernameU, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-sm">
-                        <p id="Status"></p>
-                    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.UsernameU,"Username", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.UsernameU, new { htmlAttributes = new { @class = "form-control", @placeholder = "Your account username", @id = "Username", @name = "Username", @onchange = "UserCheck()", @required = "true" } })
+            <div class="row">
+                <div class="col-sm">
+                    @Html.ValidationMessageFor(model => model.user.UsernameU, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm">
+                    <p id="Status"></p>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user.PasswordU, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user.PasswordU, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Your password" } })
-                @Html.ValidationMessageFor(model => model.user.PasswordU, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.user.PasswordU,"Password", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.user.PasswordU, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Your password", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.user.PasswordU, "", new { @class = "text-danger" })
         </div>
+    </div>
 
+    @if (Model.user.IDUT == 1)
+    {
+
+    }
+    else
+    {
         <div class="form-group">
-            @Html.LabelFor(model => model.user.IDUT, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.user.IDUT,"Usertype", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10" style="margin-top:10px">
                 <div class="dropdown">
-                    @Html.DropDownListFor(model => model.user.IDUT, new SelectList(Model.usertypeedit, "IDUT", "NameUT", 1).Distinct().ToList(), new { @Value = Model.usertypeedit.Select(i => i.IDUT) })
+                    @Html.DropDownListFor(model => model.user.IDUT, new SelectList(Model.usertypeedit, "IDUT", "NameUT", 1).Distinct().ToList(), new { @Value = Model.usertypeedit.Select(i => i.IDUT), @required = "true" })
                     @Html.ValidationMessageFor(model => model.user.IDUT, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
+    }
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" id="savebtn" />
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" id="savebtn" />
         </div>
     </div>
+</div>
 }
 
 <div>

@@ -14,9 +14,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800|Montserrat:300,400,700" rel="stylesheet">
 
-    <!-- Bootstrap CSS File -->
-    <link href="@Url.Content("~/Content/LC_Themes/lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
-
+    <!-- Bootstrap CSS File (Error while use dataTable here)-->
+    <!--<link href="Url.Content("~/Content/LC_Themes/lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet">-->
     <!-- Libraries CSS Files -->
     <link href="@Url.Content("~/Content/LC_Themes/lib/font-awesome/css/font-awesome.min.css")" rel="stylesheet">
     <link href="@Url.Content("~/Content/LC_Themes/lib/animate/animate.min.css")" rel="stylesheet">
@@ -27,7 +26,6 @@
 
     <!-- Main Stylesheet File -->
     <link href="@Url.Content("~/Content/LC_Themes/css/style.css")" rel="stylesheet">
-
     <style>
         .dropdowns {
             margin-right: 80px;
@@ -49,6 +47,7 @@
             display: block;
         }
     </style>
+
     @Scripts.Render("~/bundles/modernizr")
     <!-- =======================================================
       Theme Name: Reveal
@@ -81,22 +80,24 @@
     <!--==========================
       Header
     ============================-->
+    <img src="~/Content/LC_Themes/img/AGLogo.png" style="width:150px;height:100px;float:left;padding-left:20px;cursor:pointer" alt="Alternate Text" onclick="location.href='@Url.Action("index","Home")'" />
     <header id="header">
         <div class="container">
 
-            <div id="logo" class="pull-left">
-                <h1><a href="#body" class="scrollto">Reve<span>al</span></a></h1>
-                <!-- Uncomment below if you prefer to use an image logo -->
-                <!-- <a href="#body"><img src="img/logo.png" alt="" title="" /></a>-->
-            </div>
+            <!--<div id="logo" class="pull-left">
+
+            </div>-->
 
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
-                    <li class="menu-active"><a href="#body" style="color:dodgerblue!important">Home</a></li>
-                    <li><a href="#about">Artworks</a></li>
-                    <li><a href="#services">Newest</a></li>
-                    <li><a href="#portfolio">Popular</a></li>
-                    <li><a href="#team">About Us</a></li>
+                    <li class="menu-active"><a href="@Url.Action("Index","Home")" style="color:dodgerblue!important">Home</a></li>
+                    <li><a href="@Url.Action("GetArtList","Home")">Artworks</a></li>
+                    <li><a href="@Url.Action("ArtNewest","Home")">Newest</a></li>
+                    <li><a href="@Url.Action("ArtPopular","Home")">Popular</a></li>
+                    <li><a href="@Url.Action("ArtInSale","Home")">Art In Sale</a></li>
+                    <li><a href="@Url.Action("ArtInAuction","Home")">Art In Auction</a></li>
+                    <li>@Html.ActionLink("Upgrade", "ChooseUsertype", "Home", routeValues: null, htmlAttributes: null)</li>
+                    <li><a href="#aboutus">About Us</a></li>
                     <!--<li class="menu-has-children">
                         <a href="">Drop Down</a>
                         <ul>
@@ -111,12 +112,13 @@
                     {
                         <li style="">
                             <div class="dropdowns">
-                                @Html.ActionLink(Session["UsernameU"].ToString(), "EditUser", "Home", new { id = int.Parse(Session["IDU"].ToString()) })
+                                @Html.ActionLink(Session["UsernameU"].ToString(), "EditUser", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: null)
                                 <div class="dropdown-content">
                                     @Html.ActionLink("Profile", "EditUser", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "editprofile", style = "font-size:20px" })<br />
                                     @Html.ActionLink("My Art", "GetArtListByID", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "artlist", style = "font-size:20px" })<br />
                                     @Html.ActionLink("My Category", "GetUserCategoryByID", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "category", style = "font-size:20px" })<br />
-                                    @Html.ActionLink("Cart", "GetCartByID", "Home", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "cart", style = "font-size:20px" })<br />
+                                    @Html.ActionLink("Message", "GetMessageList", "Home", new { idu = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "message", style = "font-size:20px" })<br />
+                                    @Html.ActionLink("Cart", "GetCartList", "Home", new { idu = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: new { id = "cart", style = "font-size:20px" })<br />
                                     @Html.ActionLink("Logout", "LogoutDB", "Login", routeValues: null, htmlAttributes: new { id = "logout", style = "font-size:20px" })
                                 </div>
                             </div>
@@ -149,76 +151,63 @@
         <!--==========================
           Contact Section
         ============================-->
-        <!--<section id="contact" class="wow fadeInUp">
+        <section id="aboutus" class="wow fadeInUp" style="margin-top:50px">
             <div class="container">
                 <div class="section-header">
-                    <h2>Contact Us</h2>
-                    <p>Sed tamen tempor magna labore dolore dolor sint tempor duis magna elit veniam aliqua esse amet veniam enim export quid quid veniam aliqua eram noster malis nulla duis fugiat culpa esse aute nulla ipsum velit export irure minim illum fore</p>
+                    <h2 style="color:dodgerblue">ABOUT US</h2>
+                    <p>
+                        ONLINE ART GALLERY is application software and it is very helpful for the art
+                        lovers and others who wants to know the addresses where this kind of arts will we sold.
+                        This application helps the end-users to search their arts and paintings and they can place
+                        order for the selected pieces. The end-user can also get the information about the art
+                        exhibition and the respective address, so, that they can visit to those exhibitions.<br /><br />
+                        Art Gallery brings you an opportunity to view online art exhibitions at Online Art
+                        Gallery. We bring you details of all art exhibitions held in the past and the forthcoming
+                        show. The Online Art Gallery is updated daily, so the user can view and buy the latest
+                        collection of contemporary art online from anywhere in the world. You can view and buy
+                        the latest Indian contemporary art collection available at their exhibitions and also at
+                        their online gallery.
+                    </p>
                 </div>
 
+
+            </div>
+
+
+
+
+        </section>
+
+        <section id="contact" class="wow fadeInUp">
+            <div class="container">
+                <h2 style="color:dodgerblue;font-weight:bold">CONTACT US</h2>
                 <div class="row contact-info">
 
                     <div class="col-md-4">
                         <div class="contact-address">
-                            <i class="ion-ios-location-outline"></i>
-                            <h3>Address</h3>
-                            <address>A108 Adam Street, NY 535022, USA</address>
+                            <h3 style="color:dodgerblue">Address</h3>
+                            <p>212-214 Nguyen Dinh Chieu- District 3- Ho Chi Minh City</p>
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="contact-phone">
-                            <i class="ion-ios-telephone-outline"></i>
-                            <h3>Phone Number</h3>
-                            <p><a href="tel:+155895548855">+1 5589 55488 55</a></p>
+                            <h3 style="color:dodgerblue">Phonenumber</h3>
+                            <p>+84 398061692</p>
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="contact-email">
-                            <i class="ion-ios-email-outline"></i>
-                            <h3>Email</h3>
-                            <p><a href="mailto:info@example.com">info@example.com</a></p>
+                            <h3 style="color:dodgerblue">Address</h3>
+                            <p>212-214 Nguyen Dinh Chieu- District 3- Ho Chi Minh City</p>
                         </div>
                     </div>
 
                 </div>
             </div>
-
             <div class="container mb-4">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22864.11283411948!2d-73.96468908098944!3d40.630720240038435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sbg!4v1540447494452" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4244704632124!2d106.68783431462262!3d10.778765892319983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3a9d92c4a7%3A0x6293396afcadc8a5!2zMjEyIE5ndXnhu4VuIMSQw6xuaCBDaGnhu4N1LCBQaMaw4budbmcgNiwgUXXhuq1uIDMsIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1592480568692!5m2!1svi!2s" width="100%" height="500px" frameborder="0" style="border:0;" allowfullscreen aria-hidden="false" tabindex="0"></iframe>
             </div>
-
-            <div class="container">
-                <div class="form">
-                    <div id="sendmessage">Your message has been sent. Thank you!</div>
-                    <div id="errormessage"></div>
-                    <form action="" method="post" role="form" class="contactForm">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                                <div class="validation"></div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                                <div class="validation"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                            <div class="validation"></div>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                            <div class="validation"></div>
-                        </div>
-                        <div class="text-center"><button type="submit">Send Message</button></div>
-                    </form>
-                </div>
-
-            </div>
-        </section>-->
-        <!-- #contact -->
+        </section>
 
     </main>
 
@@ -241,21 +230,13 @@
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
 
-    @if (ViewBag.Alert != null)
-    {
-        <script type="text/javascript">
-            window.onload = function () {
 
-                alert("@ViewBag.Alert");
-        };
-        </script>
-    }
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <!-- JavaScript Libraries -->
-    <script src="@Url.Content("~/Content/LC_Themes/lib/jquery/jquery.min.js")"></script>
+    <!--<script src="Url.Content("~/Content/LC_Themes/lib/lib/jquery/jquery.min.js")"></script>-->
     <script src="@Url.Content("~/Content/LC_Themes/lib/jquery/jquery-migrate.min.js")"></script>
     <script src="@Url.Content("~/Content/LC_Themes/lib/bootstrap/js/bootstrap.bundle.min.js")"></script>
     <script src="@Url.Content("~/Content/LC_Themes/lib/easing/easing.min.js")"></script>
@@ -265,6 +246,7 @@
     <script src="@Url.Content("~/Content/LC_Themes/lib/owlcarousel/owl.carousel.min.js")"></script>
     <script src="@Url.Content("~/Content/LC_Themes/lib/magnific-popup/magnific-popup.min.js")"></script>
     <script src="@Url.Content("~/Content/LC_Themes/lib/sticky/sticky.js")"></script>
+    <script src="@Url.Content("~/Content/LC_Themes/lib/bootstrap/js/bootstrap.min.js")"></script>
 
     <!-- Contact Form JavaScript File -->
     <script src="@Url.Content("~/Content/LC_Themes/contactform/contactform.js")"></script>
@@ -272,7 +254,14 @@
     <!-- Template Main Javascript File -->
     <script src="@Url.Content("~/Content/LC_Themes/js/main.js")"></script>
 
+    @if (ViewBag.Alert != null)
+    {
+        <script type="text/javascript">
+                setTimeout(function(){ alert("@ViewBag.Alert"); }, 500);
+        </script>
+    }
 </body>
+
 </html>
 
 

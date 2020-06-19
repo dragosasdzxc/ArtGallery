@@ -22,11 +22,10 @@ namespace ArtGallery.Models.Entities
             this.Auctionhistories1 = new HashSet<Auctionhistory>();
             this.Carts = new HashSet<Cart>();
             this.LikeLists = new HashSet<LikeList>();
-            this.ReviewLists = new HashSet<ReviewList>();
-            this.Transhistories = new HashSet<Transhistory>();
-            this.Usercategories = new HashSet<Usercategory>();
             this.MessageLists = new HashSet<MessageList>();
             this.MessageLists1 = new HashSet<MessageList>();
+            this.Transhistories = new HashSet<Transhistory>();
+            this.Usercategories = new HashSet<Usercategory>();
         }
     
         public int IDU { get; set; }
@@ -54,15 +53,13 @@ namespace ArtGallery.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LikeList> LikeLists { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReviewList> ReviewLists { get; set; }
+        public virtual ICollection<MessageList> MessageLists { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MessageList> MessageLists1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transhistory> Transhistories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usercategory> Usercategories { get; set; }
         public virtual Usertype Usertype { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MessageList> MessageLists { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MessageList> MessageLists1 { get; set; }
     }
 }

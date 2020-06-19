@@ -4,15 +4,16 @@
     ViewBag.Title = "GetUserCategoryByID";
     Layout = "~/Views/Shared/_LayoutClient.cshtml";
 }
-
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
 
 <h2>My category list</h2>
 
 <p style="font-size:20px">
-    @Html.ActionLink("Create New", "CreateNewUserCategory",routeValues:null,htmlAttributes: new {@style="color:dodgerblue" })
+    @Html.ActionLink("Create New", "CreateNewUserCategory", routeValues: null, htmlAttributes: new { @style = "color:dodgerblue" })
 </p>
 
-<table class="table">
+<table id="dataTable" class="table">
     <thead>
         <tr>
             <th>
@@ -23,9 +24,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PriceUC)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NameU)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
@@ -50,9 +48,6 @@
                     @Html.DisplayFor(modelItem => item.PriceUC)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NameU)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
@@ -70,6 +65,8 @@
 </table>
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('.changestatus').click(function () {
@@ -116,6 +113,10 @@
             });
             return false;
         });
+    });
+
+    jQuery(document).ready(function ($) {
+        $('#dataTable').DataTable();
     });
 
 </script>

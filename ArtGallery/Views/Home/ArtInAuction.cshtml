@@ -1,0 +1,137 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.ArtView>
+
+@{
+    ViewBag.Title = "ArtInAuction";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="row" style="margin-top:20px">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" style="margin-top:10px">
+            <div class="box wow fadeInLeft">
+                <!--<div class="icon"><i class="fa fa-bar-chart"></i></div>-->
+                <div class="">
+                    <div style="width:100%">
+                        <img src="@Url.Content(item.FilePath)" style="width:inherit;height:200px;float:left;padding-right:20px;cursor:pointer" onclick="location.href ='@Url.Action("ArtDetail","Home",new { ida=item.IDA})'" />
+                        <div class="top-left">@item.LikeCount<span class="glyphicon glyphicon-heart" style="color:dodgerblue"></span></div>
+                    </div>
+                </div>
+                <div style="">
+                    <h4 class="title"><a href="" style="font-size:20px;color:dodgerblue;overflow:hidden">@item.NameA</a></h4>
+                    <p class="description" style="font-size:15px">
+                        Artist: <a href="@Url.Action("UserDetail","Home",new { idu=item.IDU})" style="color:dodgerblue">@item.NameU</a><br />
+                        Price: @item.PriceA
+                    </p>
+                    <button class="likebtn btn btn-primary" type="button" style="width:auto;height:auto;" value="@item.IDA">@item.Likebtn</button>
+                    @if (item.Transbtn == "View only")
+                    {
+                        <button type="button" class="btn btn-light" disabled style="">View only</button>
+                    }
+                    else if (item.Transbtn == "Sell")
+                    {
+                        <button class="addtocart btn btn-primary" type="button" style="width:auto;height:auto;" value="@item.IDA">@item.Cartbtn</button>
+                    }
+                    else if (item.Transbtn == "Auction")
+                    {
+                        <button class="addtocart btn btn-primary" type="button" style="width:auto;height:auto;" value="@item.IDA">Auction</button>
+                    }
+                    else if (item.Transbtn == "Sold")
+                    {
+                        <button type="button" class="btn btn-danger" style="" disabled>Sold</button>
+                    }
+                    else if (item.Transbtn == "Cancel auction")
+                    {
+                        <button type="button" class="btn btn-danger" style="" disabled>Cancel auction</button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.likebtn').click(function () {
+            var ida = $(this).val();
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Like") {
+                $.ajax({
+                    url: '@Url.Action("LikeArt","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success) {
+                            //alert(data.message);
+                            $(mytarget).html("Unlike");
+                        } else
+                        {
+                        alert("Please login!");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            } else {
+                $.ajax({
+                    url: '@Url.Action("UnlikeArt","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success) {
+                            //alert(data.message);
+                            $(mytarget).html("Like");
+                        } else {
+                            alert("Please login!");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            };
+        });
+
+        $('.addtocart').click(function () {
+            var ida = $(this).val();
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Add to cart") {
+                $.ajax({
+                    url: '@Url.Action("AddToCart","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success) {
+                            //alert(data.message);
+                            alert("Put art to your cart successfully!");
+                            $(mytarget).html("Already in cart");
+                        } else
+                        {
+                        alert("Please login!");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            } else if ($(this).text().toString() == "Auction") {
+                window.location.href = "/Home/ArtInAuctionByID?ida=" + ida;
+            }
+            else {
+                alert("This art is already in your cart!");
+            };
+        });
+    });
+
+</script>
+

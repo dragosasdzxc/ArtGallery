@@ -9,8 +9,8 @@ namespace ArtGallery.Models.Views
     {
         public int IDTD { get; set; }
         public int IDA { get; set; }
-        public int IDTH { get; set; }
-        public int Quantity { get; set; }
-
+        public int UIDTH { get; set; }
+        public string NameA { get; set; }
+        public decimal PriceA { get; set; }
     }
 }

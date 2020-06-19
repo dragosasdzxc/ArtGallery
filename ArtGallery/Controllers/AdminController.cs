@@ -21,7 +21,15 @@ namespace ArtGallery.Controllers
                 ViewBag.Alert = TempData["Alert"];
                 TempData.Remove("Alert");
             }
-            return View();
+            if (Session["Usertype"].ToString() == "Admin")
+            {
+                return View();
+            }
+            else {
+                TempData["Alert"] = "You don't have permission to access admin page!";
+                return RedirectToAction("Index", "Home");
+            }
+
         }
 
         public ActionResult GetUserList(UserView uv)
@@ -76,7 +84,7 @@ namespace ArtGallery.Controllers
                 if (Session["Usertype"].ToString() == "Admin")
                 {
                     ArtGalleryEntities ctx = new ArtGalleryEntities();
-                    var usertype = ctx.Usertypes.Where(ut=>ut.StatusUT==true).ToList();
+                    var usertype = ctx.Usertypes.Where(ut => ut.StatusUT == true).ToList();
                     var viewmodelut = new UserViewAdmin { usertype = usertype };
                     return View(viewmodelut);
                 }
@@ -208,7 +216,7 @@ namespace ArtGallery.Controllers
             }
         }
 
-        public ActionResult EditUser(int id)
+        public ActionResult EditUser(int id = 0)
         {
             if (TempData["Alert"] != null)
             {
@@ -337,7 +345,7 @@ namespace ArtGallery.Controllers
                         var e = ctx.Users.Where(u => u.IDU == id).FirstOrDefault<User>();
                         if (e.StatusU == true) {
                             e.StatusU = false;
-                        } else if (e.StatusU==false) {
+                        } else if (e.StatusU == false) {
                             e.StatusU = true;
                         }
                         if (ctx.SaveChanges() > 0)
@@ -367,6 +375,14 @@ namespace ArtGallery.Controllers
             using (var ctx = new ArtGalleryEntities()) {
                 var ex = ctx.Users.Where(u => u.IDU == id).FirstOrDefault<User>();
                 ex.StatusU = false;
+                ctx.MessageLists.Add(new MessageList
+                {
+                    IDMT = ctx.Messagetypes.Where(mt => mt.NameMT == "Message").Select(mt => mt.IDMT).FirstOrDefault(),
+                    IDUS = int.Parse(Session["IDU"].ToString()),
+                    IDUR = id,
+                    StatusM = false,
+                    ContentM = "Your account has been locked!"
+                });
                 ctx.SaveChanges();
             }
         }
@@ -377,6 +393,14 @@ namespace ArtGallery.Controllers
             {
                 var ex = ctx.Users.Where(u => u.IDU == id).FirstOrDefault<User>();
                 ex.StatusU = true;
+                ctx.MessageLists.Add(new MessageList
+                {
+                    IDMT = ctx.Messagetypes.Where(mt => mt.NameMT == "Message").Select(mt => mt.IDMT).FirstOrDefault(),
+                    IDUS = int.Parse(Session["IDU"].ToString()),
+                    IDUR = id,
+                    StatusM = false,
+                    ContentM = "Your account has been unlocked, be careful and do not be lock again!"
+                });
                 ctx.SaveChanges();
             }
         }
@@ -390,7 +414,7 @@ namespace ArtGallery.Controllers
             }
         }
 
-        public ActionResult GetUsertypeList() {
+        /*public ActionResult GetUsertypeList() {
             if (TempData["Alert"] != null)
             {
                 ViewBag.Alert = TempData["Alert"];
@@ -483,7 +507,7 @@ namespace ArtGallery.Controllers
             }
         }
 
-        public ActionResult EditUsertype(int id) {
+        public ActionResult EditUsertype(int id=0) {
             if (TempData["Alert"] != null)
             {
                 ViewBag.Alert = TempData["Alert"];
@@ -570,7 +594,7 @@ namespace ArtGallery.Controllers
                 ex.StatusUT = true;
                 ctx.SaveChanges();
             }
-        }
+        }*/
 
         public ActionResult GetCategoryList() {
             if (TempData["Alert"] != null)
@@ -586,11 +610,11 @@ namespace ArtGallery.Controllers
                     using (var ctx = new ArtGalleryEntities()) {
                         cv = ctx.Categories.Select(c => new CategoryView()
                         {
-                            IDC=c.IDC,
-                            NameC=c.NameC,
-                            StatusC=c.StatusC,
-                            Status=c.StatusC==true?"Unlock":"Lock",
-                            Statusbtn=c.StatusC==true?"Lock":"Unlock"
+                            IDC = c.IDC,
+                            NameC = c.NameC,
+                            StatusC = c.StatusC,
+                            Status = c.StatusC == true ? "Unlock" : "Lock",
+                            Statusbtn = c.StatusC == true ? "Lock" : "Unlock"
                         }).ToList<CategoryView>();
                     }
                     return View(cv);
@@ -647,13 +671,13 @@ namespace ArtGallery.Controllers
                     {
                         ctx.Categories.Add(new Category
                         {
-                            NameC=cv.NameC,
-                            StatusC=true
+                            NameC = cv.NameC,
+                            StatusC = true
                         });
                         ctx.SaveChanges();
                     }
                     TempData["Alert"] = "Create success!";
-                    return RedirectToAction("GetCategoryList","Admin");
+                    return RedirectToAction("GetCategoryList", "Admin");
                 }
                 else
                 {
@@ -668,7 +692,7 @@ namespace ArtGallery.Controllers
             }
         }
 
-        public ActionResult EditCategory(int id)
+        public ActionResult EditCategory(int id = 0)
         {
             if (TempData["Alert"] != null)
             {
@@ -861,7 +885,7 @@ namespace ArtGallery.Controllers
             }
         }
 
-        public ActionResult EditArttype(int id)
+        public ActionResult EditArttype(int id = 0)
         {
             if (TempData["Alert"] != null)
             {
@@ -955,6 +979,11 @@ namespace ArtGallery.Controllers
         }
 
         public ActionResult GetAllArt() {
+            if (TempData["Alert"] != null)
+            {
+                ViewBag.Alert = TempData["Alert"];
+                TempData.Remove("Alert");
+            }
             if (Session["Usertype"] != null)
             {
                 if (Session["Usertype"].ToString() == "Admin")
@@ -992,7 +1021,7 @@ namespace ArtGallery.Controllers
                         }).ToList<ArtView>();
                         return View(av);
                     }
-                    
+
                 }
                 else
                 {
@@ -1013,6 +1042,15 @@ namespace ArtGallery.Controllers
             {
                 var ex = ctx.Arts.Where(u => u.IDA == id).FirstOrDefault<Art>();
                 ex.StatusA = false;
+                ctx.MessageLists.Add(new MessageList
+                {
+                    IDMT = ctx.Messagetypes.Where(mt => mt.NameMT == "Message").Select(mt => mt.IDMT).FirstOrDefault(),
+                    IDUS = int.Parse(Session["IDU"].ToString()),
+                    IDUR = ex.IDU,
+                    StatusM = false,
+                    ContentM = "Your art has been lock by admin for violating our laws, please check this art here and change to comply with our laws!",
+                    IDA = id
+                });
                 ctx.SaveChanges();
             }
         }
@@ -1023,6 +1061,15 @@ namespace ArtGallery.Controllers
             {
                 var ex = ctx.Arts.Where(u => u.IDA == id).FirstOrDefault<Art>();
                 ex.StatusA = true;
+                ctx.MessageLists.Add(new MessageList
+                {
+                    IDMT = ctx.Messagetypes.Where(mt => mt.NameMT == "Message").Select(mt => mt.IDMT).FirstOrDefault(),
+                    IDUS = int.Parse(Session["IDU"].ToString()),
+                    IDUR = ex.IDU,
+                    StatusM = false,
+                    ContentM = "Your art has been unlock by admin, be careful and do not be lock again!",
+                    IDA = id
+                });
                 ctx.SaveChanges();
             }
         }
@@ -1043,7 +1090,12 @@ namespace ArtGallery.Controllers
             }
         }
 
-        public ActionResult ArtDetail(int id) {
+        public ActionResult ArtDetail(int id = 0) {
+            if (TempData["Alert"] != null)
+            {
+                ViewBag.Alert = TempData["Alert"];
+                TempData.Remove("Alert");
+            }
             if (Session["Usertype"] != null)
             {
                 if (Session["Usertype"].ToString() == "Admin")
@@ -1079,6 +1131,154 @@ namespace ArtGallery.Controllers
                             Statusbtn = a.StatusA == true ? "Lock" : "Unlock",
                             WidthA = a.WidthA
                         }).FirstOrDefault();
+                        return View(av);
+                    }
+
+                }
+                else
+                {
+                    TempData["Alert"] = "You don't have permission to access this page! ONLY FOR ADMIN!";
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                TempData["Alert"] = "Please login by admin account to acces this page!";
+                return RedirectToAction("Login", "Login");
+            }
+        }
+
+        public ActionResult GetTranshistoryList() {
+            if (TempData["Alert"] != null)
+            {
+                ViewBag.Alert = TempData["Alert"];
+                TempData.Remove("Alert");
+            }
+            if (Session["Usertype"] != null)
+            {
+                if (Session["Usertype"].ToString() == "Admin")
+                {
+                    using (var ctx = new ArtGalleryEntities())
+                    {
+                        List<TranshistoryView> tv = null;
+                        tv = ctx.Transhistories.Select(t => new TranshistoryView()
+                        {
+                            DaycreateTH = t.DaycreateTH,
+                            IDTH = t.IDTH,
+                            IDU = t.IDU,
+                            NameU = ctx.Users.Where(u => u.IDU == t.IDU).Select(u => u.FirstnameU + u.LastnameU).FirstOrDefault(),
+                            Total = t.Total,
+                            UIDTH = t.UIDTH,
+                        }).ToList<TranshistoryView>();
+                        return View(tv);
+                    }
+
+                }
+                else
+                {
+                    TempData["Alert"] = "You don't have permission to access this page! ONLY FOR ADMIN!";
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                TempData["Alert"] = "Please login by admin account to acces this page!";
+                return RedirectToAction("Login", "Login");
+            }
+        }
+
+        public ActionResult GetTransdetailByID(int uid) {
+            if (TempData["Alert"] != null)
+            {
+                ViewBag.Alert = TempData["Alert"];
+                TempData.Remove("Alert");
+            }
+            if (Session["Usertype"] != null)
+            {
+                if (Session["Usertype"].ToString() == "Admin")
+                {
+                    TransView trans = new TransView();
+                    using (var ctx = new ArtGalleryEntities())
+                    {
+                        List<TransdetailView> tv = null;
+                        tv = ctx.Transdetails.Where(t => t.UIDTH == uid).Select(t => new TransdetailView()
+                        {
+                            IDA = t.IDA,
+                            UIDTH = t.UIDTH,
+                            IDTD = t.IDTD,
+                            NameA = ctx.Arts.Where(a => a.IDA == t.IDA).Select(a => a.NameA).FirstOrDefault(),
+                            PriceA = ctx.Arts.Where(a => a.IDA == t.IDA).Select(a => a.PriceA).FirstOrDefault()
+                        }).ToList<TransdetailView>();
+                        TranshistoryView th = null;
+                        th = ctx.Transhistories.Where(t => t.UIDTH == uid).Select(t => new TranshistoryView()
+                        {
+                            IDTH = t.IDTH,
+                            UIDTH = t.UIDTH,
+                            DaycreateTH = t.DaycreateTH,
+                            IDU = t.IDU,
+                            NameU = ctx.Users.Where(u => u.IDU == t.IDU).Select(u => u.FirstnameU + u.LastnameU).FirstOrDefault(),
+                            Total = t.Total
+                        }).FirstOrDefault();
+                        trans.tdv = tv;
+                        trans.thv = th;
+                        return View(trans);
+                    }
+
+                }
+                else
+                {
+                    TempData["Alert"] = "You don't have permission to access this page! ONLY FOR ADMIN!";
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                TempData["Alert"] = "Please login by admin account to acces this page!";
+                return RedirectToAction("Login", "Login");
+            }
+        }
+
+        public ActionResult GetAllArtByID(int id) {
+            if (TempData["Alert"] != null)
+            {
+                ViewBag.Alert = TempData["Alert"];
+                TempData.Remove("Alert");
+            }
+            if (Session["Usertype"] != null)
+            {
+                if (Session["Usertype"].ToString() == "Admin")
+                {
+                    List<ArtView> av = null;
+                    using (var ctx = new ArtGalleryEntities())
+                    {
+                        av = ctx.Arts.Where(a => a.IDU == id).Select(a => new ArtView()
+                        {
+                            IDA = a.IDA,
+                            NameA = a.NameA,
+                            DaycreateA = a.DaycreateA,
+                            DepthA = a.DepthA,
+                            DescriptionA = a.DescriptionA,
+                            FilePath = a.FilePath,
+                            FileSize = a.FileSize,
+                            HeightA = a.HeightA,
+                            IDAS = a.IDAS,
+                            IDAT = a.IDAT,
+                            IDC = a.IDC,
+                            IDU = a.IDU,
+                            IDUC = a.IDUC,
+                            LikeCount = a.LikeCount,
+                            MaterialA = a.MaterialA,
+                            NameAS = ctx.Artstatus.Where(ast => ast.IDAS == a.IDAS).Select(ast => ast.NameAS).FirstOrDefault(),
+                            NameAT = ctx.Arttypes.Where(ast => ast.IDAT == a.IDAT).Select(ast => ast.NameAT).FirstOrDefault(),
+                            NameC = ctx.Categories.Where(ast => ast.IDC == a.IDC).Select(ast => ast.NameC).FirstOrDefault(),
+                            NameU = ctx.Users.Where(ast => ast.IDU == a.IDU).Select(ast => ast.FirstnameU + ast.LastnameU).FirstOrDefault(),
+                            NameUC = ctx.Usercategories.Where(ast => ast.IDUC == a.IDUC).Select(ast => ast.NameUC).FirstOrDefault(),
+                            PriceA = a.PriceA,
+                            StatusA = a.StatusA,
+                            Status = a.StatusA == true ? "Unlock" : "Lock",
+                            Statusbtn = a.StatusA == true ? "Lock" : "Unlock",
+                            WidthA = a.WidthA
+                        }).ToList<ArtView>();
                         return View(av);
                     }
 

@@ -20,7 +20,7 @@ namespace ArtGallery.Models.Entities
             this.Auctionhistories = new HashSet<Auctionhistory>();
             this.Carts = new HashSet<Cart>();
             this.LikeLists = new HashSet<LikeList>();
-            this.ReviewLists = new HashSet<ReviewList>();
+            this.MessageLists = new HashSet<MessageList>();
             this.Transdetails = new HashSet<Transdetail>();
         }
     
@@ -55,7 +55,7 @@ namespace ArtGallery.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LikeList> LikeLists { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReviewList> ReviewLists { get; set; }
+        public virtual ICollection<MessageList> MessageLists { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transdetail> Transdetails { get; set; }
     }

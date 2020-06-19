@@ -5,10 +5,9 @@ using System.Web;
 
 namespace ArtGallery.Models.Views
 {
-    public class TransstatusView
+    public class ArtDetailView
     {
-        public int IDTS { get; set; }
-        public string NameTS { get; set; }
-
+        public ArtView av { get; set; }
+        public UserView uv { get; set; }
     }
 }

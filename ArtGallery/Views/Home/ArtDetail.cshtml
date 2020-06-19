@@ -1,0 +1,95 @@
+﻿@model ArtGallery.Models.Views.ArtDetailView
+
+@{
+    ViewBag.Title = "ArtDetail";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<div class="row" style="padding-top:20px">
+    <div class="col-lg-6 col-md-12">
+        <img src="@Url.Content(Model.av.FilePath)" style="width:500px;height:500px" /><br />
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div style="font-weight:bold;font-size:25px;color:dodgerblue">@Model.av.NameA</div>
+        <div>Artist: @Model.av.NameA</div>
+        <div style="padding-top:15px">
+            Dimension: @Model.av.WidthA x @Model.av.HeightA x @Model.av.DepthA cm (w/h/d)<br/>
+            Material: @Model.av.MaterialA<br />
+            Arttype: @Model.av.NameAT
+        </div>
+        <div>
+            @if (Model.av.Transbtn == "View only")
+            {
+                <button type="button" class="btn btn-light" disabled>View only</button>
+            }
+            else if (Model.av.Transbtn == "Sell")
+            {
+                <button class="addtocart btn btn-primary" type="button" style="width:auto;height:auto" value="@Model.av.IDA">@Model.av.Cartbtn</button>
+            }
+            else if (Model.av.Transbtn == "Auction")
+            {
+                <button class="addtocart btn btn-primary" type="button" style="width:auto;height:auto" value="@Model.av.IDA">Auction</button>
+            }
+            else if (Model.av.Transbtn == "Sold")
+            {
+                <button type="button" class="btn btn-danger" disabled>Sold</button>
+            }
+            else if (Model.av.Transbtn == "Cancel auction")
+            {
+                <button type="button" class="btn btn-danger" disabled>Cancel auction</button>
+            }
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top:20px">
+    <div class="col-lg-6 col-md-12">
+        <div style="font-weight:bold;font-size:20px;text-decoration:underline">About art</div>
+        <div>@Model.av.DescriptionA</div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div style="font-weight:bold;font-size:20px;text-decoration:underline">About artist</div>
+        <div>Name: @Model.uv.FirstnameU @Model.uv.LastnameU --- @Model.uv.Usertype</div>
+        <div>Address: @Model.uv.AddressU</div>
+        <div>Phonenumber: @Model.uv.PhoneU</div>
+
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+
+        $('.addtocart').click(function () {
+            var ida = $(this).val();
+            var mytarget = $(this);
+            if ($(this).text().toString() == "Add to cart") {
+                $.ajax({
+                    url: '@Url.Action("AddToCart","Home")',
+                    type: 'POST',
+                    data: 'ida=' + ida,
+                    success: function (data) {
+                        // data is your result from controller
+                        if (data.success == true) {
+                            //alert(data.message);
+                            alert("Put art to your cart successfully!");
+                            $(mytarget).html("Already in cart");
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+                return false;
+            } else if ($(this).text().toString() == "Auction") {
+                window.location.href = "/Home/ArtInAuctionByID?ida="+ida;
+            }
+            else {
+                alert("This art is already in your cart!");
+            };
+        });
+    });
+
+</script>

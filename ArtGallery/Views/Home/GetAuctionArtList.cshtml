@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.ArtView>
+
+@{
+    ViewBag.Title = "GetAuctionArtList";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<link href="@Url.Content("~/Content/LC_Themes/lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
+
+
+<div class="row" style="width:100%">
+
+    @foreach (var item in Model)
+    {
+        <div class="artinfo col-lg-6" style="margin-top:10px">
+            <div class="box wow fadeInLeft">
+                <!--<div class="icon"><i class="fa fa-bar-chart"></i></div>-->
+                <img src="@Url.Content(item.FilePath)" style="width:400px;height:200px;float:left;padding-right:20px" />
+                <div style="">
+                    <h4 class="title"><a href="" style="font-size:30px;color:dodgerblue">@item.NameA</a></h4>
+                    <!--<button class="changestatus btn btn-primary" type="button" style="width:auto;height:auto" value="item.IDA">item.Statusbtn</button>-->
+                    <button class="btn btn-primary" type="button" style="width:auto;height:auto" value="@item.IDA" onclick="location.href='@Url.Action("GetAuctionRequestByID","Home",new {idu=int.Parse(Session["IDU"].ToString()),ida=item.IDA })'">Auction participants lists</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

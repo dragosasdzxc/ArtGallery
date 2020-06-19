@@ -9,9 +9,11 @@ namespace ArtGallery.Models.Views
     {
         public int IDTH { get; set; }
         public System.DateTime DaycreateTH { get; set; }
-        public int IDTS { get; set; }
         public int IDU { get; set; }
         public decimal Total { get; set; }
+        public int UIDTH { get; set; }
+        public string NameU { get; set; }
+
 
     }
 }

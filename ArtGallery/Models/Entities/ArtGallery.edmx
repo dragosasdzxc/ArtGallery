@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ArtGalleryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ArtGalleryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Art">
           <Key>
             <PropertyRef Name="IDA" />
@@ -88,6 +88,7 @@
           <Property Name="ContentM" Type="nvarchar(max)" Nullable="false" />
           <Property Name="StatusM" Type="bit" Nullable="false" />
           <Property Name="IDMT" Type="int" Nullable="false" />
+          <Property Name="IDA" Type="int" />
         </EntityType>
         <EntityType Name="Messagetype">
           <Key>
@@ -95,15 +96,6 @@
           </Key>
           <Property Name="IDMT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NameMT" Type="nvarchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ReviewList">
-          <Key>
-            <PropertyRef Name="IDR" />
-          </Key>
-          <Property Name="IDR" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IDU" Type="int" Nullable="false" />
-          <Property Name="IDA" Type="int" Nullable="false" />
-          <Property Name="ContentR" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -121,7 +113,7 @@
           </Key>
           <Property Name="IDTD" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDA" Type="int" Nullable="false" />
-          <Property Name="IDTH" Type="int" Nullable="false" />
+          <Property Name="UIDTH" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Transhistory">
           <Key>
@@ -129,16 +121,9 @@
           </Key>
           <Property Name="IDTH" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DaycreateTH" Type="datetime" Nullable="false" />
-          <Property Name="IDTS" Type="int" Nullable="false" />
           <Property Name="IDU" Type="int" Nullable="false" />
           <Property Name="Total" Type="money" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Transstatus">
-          <Key>
-            <PropertyRef Name="IDTS" />
-          </Key>
-          <Property Name="IDTS" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NameTS" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UIDTH" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Usercategory">
           <Key>
@@ -321,6 +306,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MessageList_Art">
+          <End Role="Art" Type="Self.Art" Multiplicity="0..1" />
+          <End Role="MessageList" Type="Self.MessageList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Art">
+              <PropertyRef Name="IDA" />
+            </Principal>
+            <Dependent Role="MessageList">
+              <PropertyRef Name="IDA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MessageList_Messagetype">
           <End Role="Messagetype" Type="Self.Messagetype" Multiplicity="1" />
           <End Role="MessageList" Type="Self.MessageList" Multiplicity="*" />
@@ -357,30 +354,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ReviewList_Art">
-          <End Role="Art" Type="Self.Art" Multiplicity="1" />
-          <End Role="ReviewList" Type="Self.ReviewList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Art">
-              <PropertyRef Name="IDA" />
-            </Principal>
-            <Dependent Role="ReviewList">
-              <PropertyRef Name="IDA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ReviewList_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="ReviewList" Type="Self.ReviewList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="IDU" />
-            </Principal>
-            <Dependent Role="ReviewList">
-              <PropertyRef Name="IDU" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Transdetail_Art">
           <End Role="Art" Type="Self.Art" Multiplicity="1" />
           <End Role="Transdetail" Type="Self.Transdetail" Multiplicity="*" />
@@ -390,30 +363,6 @@
             </Principal>
             <Dependent Role="Transdetail">
               <PropertyRef Name="IDA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transdetail_Transhistory">
-          <End Role="Transhistory" Type="Self.Transhistory" Multiplicity="1" />
-          <End Role="Transdetail" Type="Self.Transdetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transhistory">
-              <PropertyRef Name="IDTH" />
-            </Principal>
-            <Dependent Role="Transdetail">
-              <PropertyRef Name="IDTH" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transhistory_Transstatus">
-          <End Role="Transstatus" Type="Self.Transstatus" Multiplicity="1" />
-          <End Role="Transhistory" Type="Self.Transhistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transstatus">
-              <PropertyRef Name="IDTS" />
-            </Principal>
-            <Dependent Role="Transhistory">
-              <PropertyRef Name="IDTS" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -463,11 +412,9 @@
           <EntitySet Name="LikeList" EntityType="Self.LikeList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MessageList" EntityType="Self.MessageList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Messagetype" EntityType="Self.Messagetype" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ReviewList" EntityType="Self.ReviewList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transdetail" EntityType="Self.Transdetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Transhistory" EntityType="Self.Transhistory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Transstatus" EntityType="Self.Transstatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usercategory" EntityType="Self.Usercategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usertype" EntityType="Self.Usertype" Schema="dbo" store:Type="Tables" />
@@ -519,6 +466,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="LikeList" EntitySet="LikeList" />
           </AssociationSet>
+          <AssociationSet Name="FK_MessageList_Art" Association="Self.FK_MessageList_Art">
+            <End Role="Art" EntitySet="Art" />
+            <End Role="MessageList" EntitySet="MessageList" />
+          </AssociationSet>
           <AssociationSet Name="FK_MessageList_Messagetype" Association="Self.FK_MessageList_Messagetype">
             <End Role="Messagetype" EntitySet="Messagetype" />
             <End Role="MessageList" EntitySet="MessageList" />
@@ -531,25 +482,9 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="MessageList" EntitySet="MessageList" />
           </AssociationSet>
-          <AssociationSet Name="FK_ReviewList_Art" Association="Self.FK_ReviewList_Art">
-            <End Role="Art" EntitySet="Art" />
-            <End Role="ReviewList" EntitySet="ReviewList" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ReviewList_Users" Association="Self.FK_ReviewList_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="ReviewList" EntitySet="ReviewList" />
-          </AssociationSet>
           <AssociationSet Name="FK_Transdetail_Art" Association="Self.FK_Transdetail_Art">
             <End Role="Art" EntitySet="Art" />
             <End Role="Transdetail" EntitySet="Transdetail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transdetail_Transhistory" Association="Self.FK_Transdetail_Transhistory">
-            <End Role="Transhistory" EntitySet="Transhistory" />
-            <End Role="Transdetail" EntitySet="Transdetail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transhistory_Transstatus" Association="Self.FK_Transhistory_Transstatus">
-            <End Role="Transstatus" EntitySet="Transstatus" />
-            <End Role="Transhistory" EntitySet="Transhistory" />
           </AssociationSet>
           <AssociationSet Name="FK_Transhistory_Users" Association="Self.FK_Transhistory_Users">
             <End Role="Users" EntitySet="Users" />
@@ -564,7 +499,8 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ArtGalleryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -598,7 +534,7 @@
           <NavigationProperty Name="Auctionhistories" Relationship="Self.FK_Auctionhistory_Art" FromRole="Art" ToRole="Auctionhistory" />
           <NavigationProperty Name="Carts" Relationship="Self.FK_Cart_Art" FromRole="Art" ToRole="Cart" />
           <NavigationProperty Name="LikeLists" Relationship="Self.FK_LikeList_Art" FromRole="Art" ToRole="LikeList" />
-          <NavigationProperty Name="ReviewLists" Relationship="Self.FK_ReviewList_Art" FromRole="Art" ToRole="ReviewList" />
+          <NavigationProperty Name="MessageLists" Relationship="Self.FK_MessageList_Art" FromRole="Art" ToRole="MessageList" />
           <NavigationProperty Name="Transdetails" Relationship="Self.FK_Transdetail_Art" FromRole="Art" ToRole="Transdetail" />
         </EntityType>
         <EntityType Name="Artstatu">
@@ -661,16 +597,29 @@
           <NavigationProperty Name="Art" Relationship="Self.FK_LikeList_Art" FromRole="LikeList" ToRole="Art" />
           <NavigationProperty Name="User" Relationship="Self.FK_LikeList_Users" FromRole="LikeList" ToRole="Users" />
         </EntityType>
-        <EntityType Name="ReviewList">
+        <EntityType Name="MessageList">
           <Key>
-            <PropertyRef Name="IDR" />
+            <PropertyRef Name="IDM" />
           </Key>
-          <Property Name="IDR" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IDU" Type="Int32" Nullable="false" />
-          <Property Name="IDA" Type="Int32" Nullable="false" />
-          <Property Name="ContentR" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Art" Relationship="Self.FK_ReviewList_Art" FromRole="ReviewList" ToRole="Art" />
-          <NavigationProperty Name="User" Relationship="Self.FK_ReviewList_Users" FromRole="ReviewList" ToRole="Users" />
+          <Property Name="IDM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDUS" Type="Int32" Nullable="false" />
+          <Property Name="IDUR" Type="Int32" Nullable="false" />
+          <Property Name="ContentM" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StatusM" Type="Boolean" Nullable="false" />
+          <Property Name="IDMT" Type="Int32" Nullable="false" />
+          <Property Name="IDA" Type="Int32" />
+          <NavigationProperty Name="Art" Relationship="Self.FK_MessageList_Art" FromRole="MessageList" ToRole="Art" />
+          <NavigationProperty Name="Messagetype" Relationship="Self.FK_MessageList_Messagetype" FromRole="MessageList" ToRole="Messagetype" />
+          <NavigationProperty Name="User" Relationship="Self.FK_MessageList_Users" FromRole="MessageList" ToRole="Users" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_MessageList_Users1" FromRole="MessageList" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Messagetype">
+          <Key>
+            <PropertyRef Name="IDMT" />
+          </Key>
+          <Property Name="IDMT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameMT" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="MessageLists" Relationship="Self.FK_MessageList_Messagetype" FromRole="Messagetype" ToRole="MessageList" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -688,9 +637,8 @@
           </Key>
           <Property Name="IDTD" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDA" Type="Int32" Nullable="false" />
-          <Property Name="IDTH" Type="Int32" Nullable="false" />
+          <Property Name="UIDTH" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Art" Relationship="Self.FK_Transdetail_Art" FromRole="Transdetail" ToRole="Art" />
-          <NavigationProperty Name="Transhistory" Relationship="Self.FK_Transdetail_Transhistory" FromRole="Transdetail" ToRole="Transhistory" />
         </EntityType>
         <EntityType Name="Transhistory">
           <Key>
@@ -698,20 +646,10 @@
           </Key>
           <Property Name="IDTH" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DaycreateTH" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IDTS" Type="Int32" Nullable="false" />
           <Property Name="IDU" Type="Int32" Nullable="false" />
           <Property Name="Total" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <NavigationProperty Name="Transdetails" Relationship="Self.FK_Transdetail_Transhistory" FromRole="Transhistory" ToRole="Transdetail" />
-          <NavigationProperty Name="Transstatu" Relationship="Self.FK_Transhistory_Transstatus" FromRole="Transhistory" ToRole="Transstatus" />
+          <Property Name="UIDTH" Type="Int32" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.FK_Transhistory_Users" FromRole="Transhistory" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="Transstatu">
-          <Key>
-            <PropertyRef Name="IDTS" />
-          </Key>
-          <Property Name="IDTS" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameTS" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Transhistories" Relationship="Self.FK_Transhistory_Transstatus" FromRole="Transstatus" ToRole="Transhistory" />
         </EntityType>
         <EntityType Name="Usercategory">
           <Key>
@@ -748,12 +686,11 @@
           <NavigationProperty Name="Auctionhistories1" Relationship="Self.FK_Auctionhistory_Users1" FromRole="Users" ToRole="Auctionhistory" />
           <NavigationProperty Name="Carts" Relationship="Self.FK_Cart_Users" FromRole="Users" ToRole="Cart" />
           <NavigationProperty Name="LikeLists" Relationship="Self.FK_LikeList_Users" FromRole="Users" ToRole="LikeList" />
-          <NavigationProperty Name="ReviewLists" Relationship="Self.FK_ReviewList_Users" FromRole="Users" ToRole="ReviewList" />
+          <NavigationProperty Name="MessageLists" Relationship="Self.FK_MessageList_Users" FromRole="Users" ToRole="MessageList" />
+          <NavigationProperty Name="MessageLists1" Relationship="Self.FK_MessageList_Users1" FromRole="Users" ToRole="MessageList" />
           <NavigationProperty Name="Transhistories" Relationship="Self.FK_Transhistory_Users" FromRole="Users" ToRole="Transhistory" />
           <NavigationProperty Name="Usercategories" Relationship="Self.FK_Usercategory_Users" FromRole="Users" ToRole="Usercategory" />
           <NavigationProperty Name="Usertype" Relationship="Self.FK_Users_Usertype" FromRole="Users" ToRole="Usertype" />
-          <NavigationProperty Name="MessageLists" Relationship="ArtGalleryModel.FK_MessageList_Users" FromRole="User" ToRole="MessageList" />
-          <NavigationProperty Name="MessageLists1" Relationship="ArtGalleryModel.FK_MessageList_Users1" FromRole="User" ToRole="MessageList" />
         </EntityType>
         <EntityType Name="Usertype">
           <Key>
@@ -860,14 +797,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ReviewList_Art">
-          <End Role="Art" Type="Self.Art" Multiplicity="1" />
-          <End Role="ReviewList" Type="Self.ReviewList" Multiplicity="*" />
+        <Association Name="FK_MessageList_Art">
+          <End Role="Art" Type="Self.Art" Multiplicity="0..1" />
+          <End Role="MessageList" Type="Self.MessageList" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Art">
               <PropertyRef Name="IDA" />
             </Principal>
-            <Dependent Role="ReviewList">
+            <Dependent Role="MessageList">
               <PropertyRef Name="IDA" />
             </Dependent>
           </ReferentialConstraint>
@@ -932,39 +869,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ReviewList_Users">
+        <Association Name="FK_MessageList_Messagetype">
+          <End Role="Messagetype" Type="Self.Messagetype" Multiplicity="1" />
+          <End Role="MessageList" Type="Self.MessageList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Messagetype">
+              <PropertyRef Name="IDMT" />
+            </Principal>
+            <Dependent Role="MessageList">
+              <PropertyRef Name="IDMT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MessageList_Users">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="ReviewList" Type="Self.ReviewList" Multiplicity="*" />
+          <End Role="MessageList" Type="Self.MessageList" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="IDU" />
             </Principal>
-            <Dependent Role="ReviewList">
+            <Dependent Role="MessageList">
+              <PropertyRef Name="IDUS" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MessageList_Users1">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="MessageList" Type="Self.MessageList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
               <PropertyRef Name="IDU" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transdetail_Transhistory">
-          <End Role="Transhistory" Type="Self.Transhistory" Multiplicity="1" />
-          <End Role="Transdetail" Type="Self.Transdetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transhistory">
-              <PropertyRef Name="IDTH" />
             </Principal>
-            <Dependent Role="Transdetail">
-              <PropertyRef Name="IDTH" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Transhistory_Transstatus">
-          <End Role="Transstatus" Type="Self.Transstatu" Multiplicity="1" />
-          <End Role="Transhistory" Type="Self.Transhistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Transstatus">
-              <PropertyRef Name="IDTS" />
-            </Principal>
-            <Dependent Role="Transhistory">
-              <PropertyRef Name="IDTS" />
+            <Dependent Role="MessageList">
+              <PropertyRef Name="IDUR" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1012,11 +949,11 @@
           <EntitySet Name="Carts" EntityType="Self.Cart" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="LikeLists" EntityType="Self.LikeList" />
-          <EntitySet Name="ReviewLists" EntityType="Self.ReviewList" />
+          <EntitySet Name="MessageLists" EntityType="Self.MessageList" />
+          <EntitySet Name="Messagetypes" EntityType="Self.Messagetype" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Transdetails" EntityType="Self.Transdetail" />
           <EntitySet Name="Transhistories" EntityType="Self.Transhistory" />
-          <EntitySet Name="Transstatus" EntityType="Self.Transstatu" />
           <EntitySet Name="Usercategories" EntityType="Self.Usercategory" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="Usertypes" EntityType="Self.Usertype" />
@@ -1052,9 +989,9 @@
             <End Role="Art" EntitySet="Arts" />
             <End Role="LikeList" EntitySet="LikeLists" />
           </AssociationSet>
-          <AssociationSet Name="FK_ReviewList_Art" Association="Self.FK_ReviewList_Art">
+          <AssociationSet Name="FK_MessageList_Art" Association="Self.FK_MessageList_Art">
             <End Role="Art" EntitySet="Arts" />
-            <End Role="ReviewList" EntitySet="ReviewLists" />
+            <End Role="MessageList" EntitySet="MessageLists" />
           </AssociationSet>
           <AssociationSet Name="FK_Transdetail_Art" Association="Self.FK_Transdetail_Art">
             <End Role="Art" EntitySet="Arts" />
@@ -1076,17 +1013,17 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="LikeList" EntitySet="LikeLists" />
           </AssociationSet>
-          <AssociationSet Name="FK_ReviewList_Users" Association="Self.FK_ReviewList_Users">
+          <AssociationSet Name="FK_MessageList_Messagetype" Association="Self.FK_MessageList_Messagetype">
+            <End Role="Messagetype" EntitySet="Messagetypes" />
+            <End Role="MessageList" EntitySet="MessageLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MessageList_Users" Association="Self.FK_MessageList_Users">
             <End Role="Users" EntitySet="Users" />
-            <End Role="ReviewList" EntitySet="ReviewLists" />
+            <End Role="MessageList" EntitySet="MessageLists" />
           </AssociationSet>
-          <AssociationSet Name="FK_Transdetail_Transhistory" Association="Self.FK_Transdetail_Transhistory">
-            <End Role="Transhistory" EntitySet="Transhistories" />
-            <End Role="Transdetail" EntitySet="Transdetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Transhistory_Transstatus" Association="Self.FK_Transhistory_Transstatus">
-            <End Role="Transstatus" EntitySet="Transstatus" />
-            <End Role="Transhistory" EntitySet="Transhistories" />
+          <AssociationSet Name="FK_MessageList_Users1" Association="Self.FK_MessageList_Users1">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="MessageList" EntitySet="MessageLists" />
           </AssociationSet>
           <AssociationSet Name="FK_Transhistory_Users" Association="Self.FK_Transhistory_Users">
             <End Role="Users" EntitySet="Users" />
@@ -1100,79 +1037,7 @@
             <End Role="Usertype" EntitySet="Usertypes" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
-          <EntitySet Name="MessageLists" EntityType="ArtGalleryModel.MessageList" />
-          <EntitySet Name="Messagetypes" EntityType="ArtGalleryModel.Messagetype" />
-          <AssociationSet Name="FK_MessageList_Messagetype" Association="ArtGalleryModel.FK_MessageList_Messagetype">
-            <End Role="Messagetype" EntitySet="Messagetypes" />
-            <End Role="MessageList" EntitySet="MessageLists" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MessageList_Users" Association="ArtGalleryModel.FK_MessageList_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="MessageList" EntitySet="MessageLists" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MessageList_Users1" Association="ArtGalleryModel.FK_MessageList_Users1">
-            <End Role="User" EntitySet="Users" />
-            <End Role="MessageList" EntitySet="MessageLists" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="MessageList">
-          <Key>
-            <PropertyRef Name="IDM" />
-          </Key>
-          <Property Name="IDM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IDUS" Type="Int32" Nullable="false" />
-          <Property Name="IDUR" Type="Int32" Nullable="false" />
-          <Property Name="ContentM" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StatusM" Type="Boolean" Nullable="false" />
-          <Property Name="IDMT" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Messagetype" Relationship="ArtGalleryModel.FK_MessageList_Messagetype" FromRole="MessageList" ToRole="Messagetype" />
-          <NavigationProperty Name="User" Relationship="ArtGalleryModel.FK_MessageList_Users" FromRole="MessageList" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="ArtGalleryModel.FK_MessageList_Users1" FromRole="MessageList" ToRole="User" />
-        </EntityType>
-        <EntityType Name="Messagetype">
-          <Key>
-            <PropertyRef Name="IDMT" />
-          </Key>
-          <Property Name="IDMT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameMT" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MessageLists" Relationship="ArtGalleryModel.FK_MessageList_Messagetype" FromRole="Messagetype" ToRole="MessageList" />
-        </EntityType>
-        <Association Name="FK_MessageList_Messagetype">
-          <End Type="ArtGalleryModel.Messagetype" Role="Messagetype" Multiplicity="1" />
-          <End Type="ArtGalleryModel.MessageList" Role="MessageList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Messagetype">
-              <PropertyRef Name="IDMT" />
-            </Principal>
-            <Dependent Role="MessageList">
-              <PropertyRef Name="IDMT" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MessageList_Users">
-          <End Type="ArtGalleryModel.User" Role="User" Multiplicity="1" />
-          <End Type="ArtGalleryModel.MessageList" Role="MessageList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="IDU" />
-            </Principal>
-            <Dependent Role="MessageList">
-              <PropertyRef Name="IDUS" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MessageList_Users1">
-          <End Type="ArtGalleryModel.User" Role="User" Multiplicity="1" />
-          <End Type="ArtGalleryModel.MessageList" Role="MessageList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="IDU" />
-            </Principal>
-            <Dependent Role="MessageList">
-              <PropertyRef Name="IDUR" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1259,13 +1124,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReviewLists">
-            <EntityTypeMapping TypeName="ArtGalleryModel.ReviewList">
-              <MappingFragment StoreEntitySet="ReviewList">
-                <ScalarProperty Name="IDR" ColumnName="IDR" />
-                <ScalarProperty Name="IDU" ColumnName="IDU" />
+          <EntitySetMapping Name="MessageLists">
+            <EntityTypeMapping TypeName="ArtGalleryModel.MessageList">
+              <MappingFragment StoreEntitySet="MessageList">
+                <ScalarProperty Name="IDM" ColumnName="IDM" />
+                <ScalarProperty Name="IDUS" ColumnName="IDUS" />
+                <ScalarProperty Name="IDUR" ColumnName="IDUR" />
+                <ScalarProperty Name="ContentM" ColumnName="ContentM" />
+                <ScalarProperty Name="StatusM" ColumnName="StatusM" />
+                <ScalarProperty Name="IDMT" ColumnName="IDMT" />
                 <ScalarProperty Name="IDA" ColumnName="IDA" />
-                <ScalarProperty Name="ContentR" ColumnName="ContentR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Messagetypes">
+            <EntityTypeMapping TypeName="ArtGalleryModel.Messagetype">
+              <MappingFragment StoreEntitySet="Messagetype">
+                <ScalarProperty Name="IDMT" ColumnName="IDMT" />
+                <ScalarProperty Name="NameMT" ColumnName="NameMT" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1285,7 +1161,7 @@
               <MappingFragment StoreEntitySet="Transdetail">
                 <ScalarProperty Name="IDTD" ColumnName="IDTD" />
                 <ScalarProperty Name="IDA" ColumnName="IDA" />
-                <ScalarProperty Name="IDTH" ColumnName="IDTH" />
+                <ScalarProperty Name="UIDTH" ColumnName="UIDTH" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1294,17 +1170,9 @@
               <MappingFragment StoreEntitySet="Transhistory">
                 <ScalarProperty Name="IDTH" ColumnName="IDTH" />
                 <ScalarProperty Name="DaycreateTH" ColumnName="DaycreateTH" />
-                <ScalarProperty Name="IDTS" ColumnName="IDTS" />
                 <ScalarProperty Name="IDU" ColumnName="IDU" />
                 <ScalarProperty Name="Total" ColumnName="Total" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Transstatus">
-            <EntityTypeMapping TypeName="ArtGalleryModel.Transstatu">
-              <MappingFragment StoreEntitySet="Transstatus">
-                <ScalarProperty Name="IDTS" ColumnName="IDTS" />
-                <ScalarProperty Name="NameTS" ColumnName="NameTS" />
+                <ScalarProperty Name="UIDTH" ColumnName="UIDTH" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1345,26 +1213,6 @@
                 <ScalarProperty Name="IDUT" ColumnName="IDUT" />
                 <ScalarProperty Name="NameUT" ColumnName="NameUT" />
                 <ScalarProperty Name="StatusUT" ColumnName="StatusUT" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MessageLists">
-            <EntityTypeMapping TypeName="ArtGalleryModel.MessageList">
-              <MappingFragment StoreEntitySet="MessageList">
-                <ScalarProperty Name="IDMT" ColumnName="IDMT" />
-                <ScalarProperty Name="StatusM" ColumnName="StatusM" />
-                <ScalarProperty Name="ContentM" ColumnName="ContentM" />
-                <ScalarProperty Name="IDUR" ColumnName="IDUR" />
-                <ScalarProperty Name="IDUS" ColumnName="IDUS" />
-                <ScalarProperty Name="IDM" ColumnName="IDM" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Messagetypes">
-            <EntityTypeMapping TypeName="ArtGalleryModel.Messagetype">
-              <MappingFragment StoreEntitySet="Messagetype">
-                <ScalarProperty Name="NameMT" ColumnName="NameMT" />
-                <ScalarProperty Name="IDMT" ColumnName="IDMT" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

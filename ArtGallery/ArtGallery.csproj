@@ -52,6 +52,9 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PayPal, Version=1.9.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPal.1.9.1\lib\net45\PayPal.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -176,9 +179,6 @@
     <Compile Include="Models\Entities\Messagetype.cs">
       <DependentUpon>ArtGallery.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\ReviewList.cs">
-      <DependentUpon>ArtGallery.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Entities\sysdiagram.cs">
       <DependentUpon>ArtGallery.tt</DependentUpon>
     </Compile>
@@ -186,9 +186,6 @@
       <DependentUpon>ArtGallery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Transhistory.cs">
-      <DependentUpon>ArtGallery.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Entities\Transstatu.cs">
       <DependentUpon>ArtGallery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\User.cs">
@@ -200,20 +197,24 @@
     <Compile Include="Models\Entities\Usertype.cs">
       <DependentUpon>ArtGallery.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PaypalConfiguration.cs" />
     <Compile Include="Models\Views\AddArtView.cs" />
+    <Compile Include="Models\Views\ArtCategory.cs" />
+    <Compile Include="Models\Views\ArtDetailView.cs" />
     <Compile Include="Models\Views\ArtstatusView.cs" />
     <Compile Include="Models\Views\ArttypeView.cs" />
     <Compile Include="Models\Views\ArtView.cs" />
+    <Compile Include="Models\Views\AuctionArtView.cs" />
     <Compile Include="Models\Views\AuctionhistoryView.cs" />
     <Compile Include="Models\Views\CartView.cs" />
     <Compile Include="Models\Views\CategoryView.cs" />
+    <Compile Include="Models\Views\IndexView.cs" />
     <Compile Include="Models\Views\LikeListView.cs" />
     <Compile Include="Models\Views\MessageListView.cs" />
     <Compile Include="Models\Views\MessagetypeView.cs" />
-    <Compile Include="Models\Views\ReviewListView.cs" />
     <Compile Include="Models\Views\TransdetailView.cs" />
     <Compile Include="Models\Views\TranshistoryView.cs" />
-    <Compile Include="Models\Views\TransstatusView.cs" />
+    <Compile Include="Models\Views\TransView.cs" />
     <Compile Include="Models\Views\UsercategoryView.cs" />
     <Compile Include="Models\Views\UsertypeView.cs" />
     <Compile Include="Models\Views\UserView.cs" />
@@ -471,6 +472,8 @@
     <Content Include="Content\LA_Themes\plugins\images\admin-logo.png" />
     <Content Include="Content\LA_Themes\plugins\images\admin-text-dark.png" />
     <Content Include="Content\LA_Themes\plugins\images\admin-text.png" />
+    <Content Include="Content\LA_Themes\plugins\images\AGLogo.png" />
+    <Content Include="Content\LA_Themes\plugins\images\ArtGalleryLogo.png" />
     <Content Include="Content\LA_Themes\plugins\images\favicon.png" />
     <Content Include="Content\LA_Themes\plugins\images\large\img1.jpg" />
     <Content Include="Content\LA_Themes\plugins\images\users\arijit.jpg" />
@@ -486,6 +489,7 @@
     <Content Include="Content\LC_Themes\css\scss-files.txt" />
     <Content Include="Content\LC_Themes\css\style.css" />
     <Content Include="Content\LC_Themes\img\about-img.jpg" />
+    <Content Include="Content\LC_Themes\img\AGLogo.png" />
     <Content Include="Content\LC_Themes\img\apple-touch-icon.png" />
     <Content Include="Content\LC_Themes\img\clients\client-1.png" />
     <Content Include="Content\LC_Themes\img\clients\client-2.png" />
@@ -496,6 +500,8 @@
     <Content Include="Content\LC_Themes\img\clients\client-7.png" />
     <Content Include="Content\LC_Themes\img\clients\client-8.png" />
     <Content Include="Content\LC_Themes\img\favicon.png" />
+    <Content Include="Content\LC_Themes\img\icons8-art-prices-64-standard.png" />
+    <Content Include="Content\LC_Themes\img\icons8-art-prices-64.png" />
     <Content Include="Content\LC_Themes\img\intro-carousel\1.jpg" />
     <Content Include="Content\LC_Themes\img\intro-carousel\2.jpg" />
     <Content Include="Content\LC_Themes\img\intro-carousel\3.jpg" />
@@ -773,13 +779,6 @@
     <Content Include="Content\LA_Themes\plugins\bower_components\sidebar-nav\LICENSE" />
     <Content Include="Content\LA_Themes\plugins\bower_components\sidebar-nav\package.json" />
     <Content Include="Content\LA_Themes\plugins\bower_components\sidebar-nav\README.md" />
-    <EntityDeploy Include="Models\Entities\ArtGallery.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ArtGallery.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Entities\ArtGallery.edmx.diagram">
-      <DependentUpon>ArtGallery.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\LC_Themes\lib\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\LC_Themes\lib\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\LC_Themes\lib\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -790,6 +789,13 @@
     <Content Include="Content\LC_Themes\lib\ionicons\fonts\ionicons.woff" />
     <Content Include="Content\LC_Themes\lib\owlcarousel\LICENSE" />
     <Content Include="Content\LC_Themes\lib\owlcarousel\README.md" />
+    <EntityDeploy Include="Models\Entities\ArtGallery.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ArtGallery.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Entities\ArtGallery.edmx.diagram">
+      <DependentUpon>ArtGallery.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -802,7 +808,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Views\Admin\CreateNewUsers.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -823,9 +831,6 @@
     <Content Include="Views\Admin\EditUser.cshtml" />
     <Content Include="Views\Admin\GetUserList.cshtml" />
     <Content Include="Views\Home\EditUser.cshtml" />
-    <Content Include="Views\Admin\GetUsertypeList.cshtml" />
-    <Content Include="Views\Admin\EditUsertype.cshtml" />
-    <Content Include="Views\Admin\CreateNewUsertype.cshtml" />
     <Content Include="Views\Admin\GetCategoryList.cshtml" />
     <Content Include="Views\Admin\CreateNewCategory.cshtml" />
     <Content Include="Views\Admin\EditCategory.cshtml" />
@@ -843,6 +848,27 @@
     <Content Include="Views\Home\CreateNewUserCategory.cshtml" />
     <Content Include="Views\Home\GetArtInUCByID.cshtml" />
     <Content Include="Views\Home\ChooseArtByID.cshtml" />
+    <Content Include="Views\Home\GetCartList.cshtml" />
+    <Content Include="Views\Home\GetMessageList.cshtml" />
+    <Content Include="Views\Home\ChooseUsertype.cshtml" />
+    <Content Include="Views\Home\ArtInAuctionByID.cshtml" />
+    <Content Include="Views\Home\GetAuctionArtList.cshtml" />
+    <Content Include="Views\Home\GetAuctionRequestByID.cshtml" />
+    <Content Include="Views\Admin\GetTranshistoryList.cshtml" />
+    <Content Include="Views\Admin\GetTransdetailByID.cshtml" />
+    <Content Include="Views\Admin\GetAllArtByID.cshtml" />
+    <Content Include="Views\Home\UserDetail.cshtml" />
+    <Content Include="Views\Home\UserArt.cshtml" />
+    <Content Include="Views\Home\ArtDetail.cshtml" />
+    <Content Include="Views\Home\TranshistoryList.cshtml" />
+    <Content Include="Views\Home\TransdetailList.cshtml" />
+    <Content Include="Views\Home\UserCategory.cshtml" />
+    <Content Include="Views\Home\UserArtCategory.cshtml" />
+    <Content Include="Views\Home\GetArtByIDC.cshtml" />
+    <Content Include="Views\Home\ArtInSale.cshtml" />
+    <Content Include="Views\Home\ArtInAuction.cshtml" />
+    <Content Include="Views\Home\ArtNewest.cshtml" />
+    <Content Include="Views\Home\ArtPopular.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

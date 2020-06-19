@@ -1,0 +1,129 @@
+﻿@model ArtGallery.Models.Views.AuctionArtView
+
+@{
+    ViewBag.Title = "ArtInAuctionByID";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var first = true;
+}
+
+<!--<meta http-equiv="refresh" content="10">-->
+<!--<h2 style="padding-top:10px">Auction page auto refresh after 10 seconds</h2>-->
+
+<div id="countdown" style="width:100%;text-align:center;padding-bottom:10px;padding-top:10px;color:dodgerblue"></div>
+<div class="row">
+    <div class="col-lg-6 col-md-12">
+        <img src="@Url.Content(Model.av.FilePath)" alt="Alternate Text" style="width:400px;height:200px" />
+        <div>
+            <div>@Model.av.NameA</div>
+            <div>Artist: @Model.av.NameU</div>
+            <div><button type="button" class="btn btn-primary" style="width:auto;height:auto" onclick="location.href='@Url.Action("ArtDetail","Home",new { ida=Model.av.IDA})'">Detail</button></div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div style="width:100%;text-align:center;font-weight:bold;font-size:15px">Top 5 highest auction participants</div>
+        <table class="table" id="auctionTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ahv)
+                {
+
+                    <tr>
+                        <td>@item.NameUA</td>
+                        <td><p id="@(first ? Html.Raw("highestprice") : Html.Raw(""))">@item.PriceAu</p></td>
+                        <td>@(first ? Html.Raw("<===HIGHEST PRICE") : Html.Raw(""))</td>
+                    </tr>
+                    first = false;
+                }
+            </tbody>
+            <!--<tfoot>
+                <tr>
+                    <td>Highest price:</td>
+                    <td><p class="highestprice">Model.currentPrice</p></td>
+                </tr>
+            </tfoot>-->
+        </table>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <label>Enter the price</label>
+                <input type="number" id="auctionprice" value="" min="0" max="2000000000" style="width:100%" placeholder="Your price must be higher than highest price" />
+                <p style="color:dodgerblue;font-weight:bold">*We pay by paypal, please make sure your account balance is sufficient before join auction.*</p>
+                <button id="joinauction" type="button" class="btn btn-primary" value="@Model.av.IDA" style="margin-top:10px">Join auction</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#joinauction').click(function () {
+            var aucval = $('#auctionprice').val();
+            var val = $(this).val();
+            if ($('#auctionprice').val() == null || $('#auctionprice').val() == "") {
+                alert("Please enter your price for auction!");
+            } else {
+                var auctionprice = parseInt($('#auctionprice').val());
+                /*var p = document.getElementById('highestprice');
+                var value = p.textContent;
+                var highestprice = Number(value);
+                if (auctionprice > highestprice) {*/
+                    $.ajax({
+                        url: '@Url.Action("UpdatePriceAuction", "Home")',
+                        type: 'POST',
+                        data: 'ida=' + val + '&price=' + auctionprice,
+                        success: function (data) {
+                            if (data.success == true) {
+                                alert(data.message);
+                                location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                        }
+                    });
+                /*} else {
+                    alert("Your price must be higher than highest price!");
+                }*/
+                    
+
+            };
+
+        });
+
+        var timeleft = 10;
+        var downloadTimer = setInterval(function () {
+            if (timeleft <= 0) {
+                //clearInterval(downloadTimer);
+                document.getElementById("countdown").innerHTML = "Refreshing...!";
+                $.ajax({
+                    url: '@Url.Action("GetTop5AuctionParticipants","Home")',
+                    dataType: "json",
+                    method: 'get',
+                    success: function (data) {
+                        var itemTable = $('#auctionTable tbody');
+                        itemTable.empty();
+                        $(data).each(function (index, item) {
+                            itemTable.append('<tr><td>' + item.NameUA + '</td><td>'
+                                + item.PriceAu + '</td></tr>');
+                        });
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+                timeleft = 10;
+            } else {
+                document.getElementById("countdown").innerHTML = "Auction participants lists refresh after " + timeleft + " seconds.";
+            }
+            timeleft -= 1;
+        }, 1000);
+    });
+
+
+</script>
+

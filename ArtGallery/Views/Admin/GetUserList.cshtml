@@ -29,6 +29,7 @@
             <th>
                 Usertype
             </th>
+            <th>Arts</th>
             <th>Detail & Edit</th>
             <th>Change status</th>
             <th>Delete</th>
@@ -50,6 +51,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Usertype)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" style="width:auto;height:auto" onclick="location.href='@Url.Action("GetAllArtByID","Admin",new { id=item.IDU})'">Arts</button>
                 </td>
                 <td>
                     <!--Html.ActionLink("Edit", "EditUser", new { id = item.IDU })-->

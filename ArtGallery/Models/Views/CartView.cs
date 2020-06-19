@@ -13,6 +13,12 @@ namespace ArtGallery.Models.Views
         public bool StatusCA { get; set; }
         public string NameU { get; set; }
         public string NameA { get; set; }
+        public decimal PriceA { get; set; }
 
+    }
+
+    public class CartDetailView
+    {
+        public List<CartView> cartdetail { get; set; }
     }
 }

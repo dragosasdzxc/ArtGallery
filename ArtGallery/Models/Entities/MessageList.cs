@@ -20,7 +20,9 @@ namespace ArtGallery.Models.Entities
         public string ContentM { get; set; }
         public bool StatusM { get; set; }
         public int IDMT { get; set; }
+        public Nullable<int> IDA { get; set; }
     
+        public virtual Art Art { get; set; }
         public virtual Messagetype Messagetype { get; set; }
         public virtual User User { get; set; }
         public virtual User User1 { get; set; }

@@ -1,0 +1,294 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.MessageListView>
+
+@{
+    ViewBag.Title = "GetMessageList";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<style>
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .closereply {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .closereply:hover,
+        .closereply:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<h2>GetMessageList</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                From
+            </th>
+            <!--<th>
+                Html.DisplayNameFor(model => model.ContentM)
+            </th>-->
+            <th>
+                Type
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    <a href="#" style="color:black">@item.NameUS</a>
+                </td>
+                <!--<td>
+                    Html.DisplayFor(modelItem => item.ContentM)
+                </td>-->
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameMT)
+                </td>
+                <td>
+                    <p class="statusmes">@item.Status</p>
+                </td>
+                @if (item.NameMT == "Notification")
+                {
+                    <td>
+                        <button type="button" class="readcontent btn btn-primary" style="width:auto;height:auto" value="@item.IDM">Read</button>
+                    </td>
+                }
+                else if (item.NameMT == "Auction accept")
+                {
+                    <td>
+                        <button type="button" class="readcontent btn btn-primary" style="width:auto;height:auto" value="@item.IDM">Read</button>
+                    </td>
+                    <td>
+                        <button type="button" id="payauction" class="btn btn-primary" style="width:auto;height:auto" value="@item.IDA" onclick="location.href='@Url.Action("GetIDA", "Home", new { ida = item.IDA })'">Pay (Paypal)</button>
+                    </td>
+                    <td>
+                        <button type="button" id="decline" class="decline btn btn-primary" style="width:auto;height:auto" value="@item.IDM">Decline</button>
+                    </td>
+                }
+                else if (item.NameMT == "Message")
+                {
+                    <td>
+                        <button type="button" class="readcontent btn btn-primary" style="width:auto;height:auto" value="@item.IDM">Read</button>
+                    </td>
+                    <td>
+                        <button type="button" class="replycontent btn btn-primary" style="width:auto;height:auto" value="@item.IDM">Reply</button>
+                    </td>
+                    <td>
+                        <button type="button" class="deletebtn btn btn-primary" style="width:auto;height:auto" value="@item.IDM">Delete</button>
+                    </td>
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="modal" id="contentModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="nameus" contenteditable="false"></p>
+        <p id="contentm" contenteditable="false"></p>
+    </div>
+</div>
+<div class="modal" id="replyModal">
+    <div class="modal-content">
+        <span class="closereply">&times;</span>
+        <p id="nameusreply" contenteditable="false"></p>
+        <p id="contentmreply" contenteditable="false"></p>
+        <p>Reply:</p>
+        <textarea id="replyinput" cols="100" rows="3">
+            
+        </textarea><br />
+        <button style="" type="button" class="btn btn-primary" id="sendreply">Send</button>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    // Get the modal
+    var modal = document.getElementById("contentModal");
+    var replymodal = document.getElementById("replyModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementsByClassName("readcontent");
+    var replybtn = document.getElementsByClassName("replycontent");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    var replyspan = document.getElementsByClassName("closereply")[0];
+
+    // When the user clicks the button, open the modal
+    /*btn.onclick = function (event) {
+        modal.style.display = "block";
+    }*/
+
+    $('.readcontent').click(function () {
+        var idm = $(this).val();
+        var status = $(this).closest("tr").find('.statusmes');
+        status.html("Seen");
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMessageContentByID", "Home")',
+            contentType: "application/json; charset=utf-8",
+            data:'idm='+idm,
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $('#nameus').html("From: "+response.NameUS);
+                    $('#contentm').html(response.ContentM);
+                } else {
+                    alert("Something went wrong");
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        modal.style.display = "block";
+    });
+
+    $('.replycontent').click(function () {
+        var idm = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMessageContentByID", "Home")',
+            contentType: "application/json; charset=utf-8",
+            data:'idm='+idm,
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    $('#nameusreply').html("From: "+response.NameUS);
+                    $('#contentmreply').html(response.ContentM);
+                    $('#sendreply').val(response.IDUS);
+                } else {
+                    alert("Something went wrong");
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        replymodal.style.display = "block";
+    });
+
+    $('#sendreply').click(function () {
+        var replycontent = $('#replyinput').val();
+        var idus = 0;
+        var idur = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendMessage", "Home")',
+            data: 'idus=' + idus + '&idur=' + idur + '&contentm=' + replycontent,
+            success: function () {
+                alert("Send message success!");
+                replymodal.style.display = "none";
+            },
+        });
+    });
+
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        } else if (event.target == replymodal) {
+            replymodal.style.display = "none";
+        }
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function (event) {
+        modal.style.display = "none";
+    }
+
+    replyspan.onclick = function (event) {
+        replymodal.style.display = "none";
+    }
+
+    $('.deletebtn').click(function () {
+
+            var idm = $(this).val();
+            var idu = parseInt(@Session["IDU"].ToString());
+            var row = $(this).closest("tr");
+            $.ajax({
+                url: '@Url.Action("DeleteMessage", "Home")',
+                type: 'POST',
+                data: 'idm=' + idm,
+                success: function () {
+                    row.remove();
+                    //alert("Remove success!");
+                }
+            });
+            return false;
+    });
+
+    $('.decline').click(function () {
+        var idm = $(this).val();
+            var idu = parseInt(@Session["IDU"].ToString());
+            var row = $(this).closest("tr");
+            $.ajax({
+                url: '@Url.Action("DeclineAuctionMessageDB", "Home")',
+                type: 'POST',
+                data: 'idm=' + idm,
+                success: function () {
+                    row.remove();
+                    //alert("Remove success!");
+                }
+            });
+            return false;
+    });
+</script>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ArtGallery.Models.Views.TransdetailView>
+
+@{
+    ViewBag.Title = "TransdetailList";
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+
+<h2>TransdetailList</h2>
+
+<table id="dataTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NameA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PriceA)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceA)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        $('#dataTable').DataTable({
+            responsive: true,
+        });
+
+    });
+</script>

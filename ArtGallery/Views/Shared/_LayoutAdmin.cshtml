@@ -49,21 +49,16 @@
         <!-- ============================================================== -->
         <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header">
-                <div class="top-left-part">
+                <div class="top-left"><!--top-left-part-->
                     <!-- Logo -->
                     <a class="logo" href="#">
                         <!-- Logo icon image, you can use font-icon also --><b>
-                            <!--This is dark logo icon--><img src="~/Content/LA_Themes/plugins/images/admin-logo.png" alt="home"
+                            <!--<img src="~/Content/LA_Themes/plugins/images/admin-logo.png" alt="home"
                                                               class="dark-logo" />
-                            <!--This is light logo icon--><img src="~/Content/LA_Themes/plugins/images/admin-logo-dark.png" alt="home"
-                                                               class="light-logo" />
-                        </b>
-                        <!-- Logo text image you can use text also --><span class="hidden-xs">
-                            <!--This is dark logo text--><img src="~/Content/LA_Themes/plugins/images/admin-text.png" alt="home"
-                                                              class="dark-logo" />
-                            <!--This is light logo text--><img src="~/Content/LA_Themes/plugins/images/admin-text-dark.png" alt="home"
-                                                               class="light-logo" />
-                        </span>
+                            <img src="~/Content/LA_Themes/plugins/images/admin-logo-dark.png" alt="home"
+                                                               class="light-logo" />-->
+                            <img src="~/Content/LA_Themes/plugins/images/AGLogo.png" alt="home"
+                                 style="width:100px;height:75px" />
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -87,7 +82,7 @@
                                  width="36" class="img-circle"><b class="hidden-xs">Session["UsernameU"]</b>
                             </a>-->
                             <ul class="nav navbar-nav navbar-right">
-                                <li>@Html.ActionLink(Session["UsernameU"].ToString(), "EditUser", "Home", new { id = int.Parse(Session["IDU"].ToString()) }) </li>
+                                <li>@Html.ActionLink(Session["UsernameU"].ToString(), "EditUser", "Admin", new { id = int.Parse(Session["IDU"].ToString()) }, htmlAttributes: null) </li>
                                 <li>@Html.ActionLink("Logout", "LogoutDB", "Login", routeValues: null, htmlAttributes: new { id = "logout" })</li>
 
                             </ul>
@@ -96,7 +91,7 @@
                         {
                             <ul class="nav navbar-nav navbar-right">
                                 <!--<li>Html.ActionLink("Register", "Register", "Login", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>-->
-                                <li>@Html.ActionLink("Register", "Register", "Login", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                                <!--<li>Html.ActionLink("Register", "Register", "Login", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>-->
                                 <li>@Html.ActionLink("Log in", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                             </ul>
                         }
@@ -130,12 +125,6 @@
                         </a>
                     </li>
                     <li>
-                        <a class="waves-effect" href="@Url.Action("GetUsertypeList","Admin")">
-                            <i class="fa fa-user fa-fw"
-                               aria-hidden="true"></i>User types
-                        </a>
-                    </li>
-                    <li>
                         <a href="@Url.Action("GetCategoryList","Admin")" class="waves-effect">
                             <i class="fa fa-table fa-fw"
                                aria-hidden="true"></i>Categories
@@ -154,7 +143,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="" class="waves-effect">
+                        <a href="@Url.Action("GetTranshistoryList","Admin")" class="waves-effect">
                             <i class="fa fa-info-circle fa-fw"
                                aria-hidden="true"></i>Transactions
                         </a>
@@ -177,7 +166,7 @@
                 @RenderBody()
             </div>
             <!-- /.container-fluid -->
-            <footer class="footer text-center"> 2017 &copy; Ample Admin brought to you by wrappixel.com </footer>
+            <!--<footer class="footer text-center"> 2017 &copy; Ample Admin brought to you by wrappixel.com </footer>-->
         </div>
         <!-- ============================================================== -->
         <!-- End Page Content -->

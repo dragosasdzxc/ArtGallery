@@ -32,15 +32,13 @@ namespace ArtGallery.Models.Entities
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<LikeList> LikeLists { get; set; }
-        public virtual DbSet<ReviewList> ReviewLists { get; set; }
+        public virtual DbSet<MessageList> MessageLists { get; set; }
+        public virtual DbSet<Messagetype> Messagetypes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Transdetail> Transdetails { get; set; }
         public virtual DbSet<Transhistory> Transhistories { get; set; }
-        public virtual DbSet<Transstatu> Transstatus { get; set; }
         public virtual DbSet<Usercategory> Usercategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Usertype> Usertypes { get; set; }
-        public virtual DbSet<MessageList> MessageLists { get; set; }
-        public virtual DbSet<Messagetype> Messagetypes { get; set; }
     }
 }
